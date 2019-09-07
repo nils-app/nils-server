@@ -2,8 +2,9 @@ import express from "express";
 import compression from "compression";
 import bodyParser from "body-parser";
 import lusca from "lusca";
-import status from "./endpoints/status";
 // import passport from "passport";
+
+import status from "./endpoints/status";
 
 // API keys and Passport configuration
 // import * as passportConfig from "./config/passport";

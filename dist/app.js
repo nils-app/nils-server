@@ -7,8 +7,8 @@ const express_1 = __importDefault(require("express"));
 const compression_1 = __importDefault(require("compression"));
 const body_parser_1 = __importDefault(require("body-parser"));
 const lusca_1 = __importDefault(require("lusca"));
-const status_1 = __importDefault(require("./endpoints/status"));
 // import passport from "passport";
+const status_1 = __importDefault(require("./endpoints/status"));
 // API keys and Passport configuration
 // import * as passportConfig from "./config/passport";
 // Create Express server
