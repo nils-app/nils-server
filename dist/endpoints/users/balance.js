@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = (req, res) => {
     res.json({
-        version: '0.0.1',
+        balance: '100',
     });
 };
-//# sourceMappingURL=status.js.map
+//# sourceMappingURL=balance.js.map

@@ -9,6 +9,7 @@ const body_parser_1 = __importDefault(require("body-parser"));
 const lusca_1 = __importDefault(require("lusca"));
 // import passport from "passport";
 const status_1 = __importDefault(require("./endpoints/status"));
+const users_1 = __importDefault(require("./endpoints/users"));
 // API keys and Passport configuration
 // import * as passportConfig from "./config/passport";
 // Create Express server
@@ -44,22 +45,7 @@ app.use(lusca_1.default.xssProtection(true));
  * Primary app routes.
  */
 app.get("/", status_1.default);
-// app.get("/login", userController.getLogin);
-// app.post("/login", userController.postLogin);
-// app.get("/logout", userController.logout);
-// app.get("/forgot", userController.getForgot);
-// app.post("/forgot", userController.postForgot);
-// app.get("/reset/:token", userController.getReset);
-// app.post("/reset/:token", userController.postReset);
-// app.get("/signup", userController.getSignup);
-// app.post("/signup", userController.postSignup);
-// app.get("/contact", contactController.getContact);
-// app.post("/contact", contactController.postContact);
-// app.get("/account", passportConfig.isAuthenticated, userController.getAccount);
-// app.post("/account/profile", passportConfig.isAuthenticated, userController.postUpdateProfile);
-// app.post("/account/password", passportConfig.isAuthenticated, userController.postUpdatePassword);
-// app.post("/account/delete", passportConfig.isAuthenticated, userController.postDeleteAccount);
-// app.get("/account/unlink/:provider", passportConfig.isAuthenticated, userController.getOauthUnlink);
+app.use("/users", users_1.default);
 // /**
 //  * API examples routes.
 //  */
