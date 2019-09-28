@@ -3,7 +3,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const dotenv_1 = __importDefault(require("dotenv"));
 const errorhandler_1 = __importDefault(require("errorhandler"));
+dotenv_1.default.config();
 const app_1 = __importDefault(require("./app"));
 /**
  * Error Handler. Provides full stack - remove for production

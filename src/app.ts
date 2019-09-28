@@ -2,8 +2,9 @@ import express from "express";
 import compression from "compression";
 import bodyParser from "body-parser";
 import lusca from "lusca";
-// import passport from "passport";
+import passport from "passport";
 
+import auth from "./endpoints/auth";
 import status from "./endpoints/status";
 import users from "./endpoints/users";
 
@@ -22,6 +23,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // app.use(passport.session());
 app.use(lusca.xframe("SAMEORIGIN"));
 app.use(lusca.xssProtection(true));
+app.use(passport.initialize());
+app.use(passport.session());
 
 // app.use((req, res, next) => {
 //     res.locals.user = req.user;
@@ -48,12 +51,15 @@ app.use(lusca.xssProtection(true));
  */
 app.get("/", status);
 app.use("/users", users);
+app.use("/auth", auth);
 
 // /**
 //  * API examples routes.
 //  */
 // app.get("/api", apiController.getApi);
 // app.get("/api/facebook", passportConfig.isAuthenticated, passportConfig.isAuthorized, apiController.getFacebook);
+
+
 
 // /**
 //  * OAuth authentication routes. (Sign in)
