@@ -34,6 +34,7 @@
     "dotenv": "^8.1.0",
     "errorhandler": "^1.5.1",
     "express": "^4.17.1",
+    "express-list-endpoints": "^4.0.1",
     "express-validator": "^6.0.1",
     "lodash": "^4.17.13",
     "lusca": "^1.6.1",

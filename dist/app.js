@@ -47,9 +47,10 @@ app.use(passport_1.default.session());
 /**
  * Primary app routes.
  */
-app.get("/", status_1.default);
 app.use("/users", users_1.default);
 app.use("/auth", auth_1.default);
+// This endpoint must be the last one
+app.get("/", status_1.default(app));
 // /**
 //  * API examples routes.
 //  */
