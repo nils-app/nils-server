@@ -1,14 +1,8 @@
 import dotenv from 'dotenv';
-import errorHandler from "errorhandler";
 
 dotenv.config();
 
 import app from "./app";
-
-/**
- * Error Handler. Provides full stack - remove for production
- */
-app.use(errorHandler());
 
 /**
  * Start Express server.
