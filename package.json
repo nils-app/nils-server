@@ -5,9 +5,9 @@
   "description": "Backend for the nil extension",
   "repository": {
     "type": "git",
-    "url": "https://github.com/aurbano/nil-server"
+    "url": "https://github.com/nils-app/nils-server"
   },
-  "author": "Alejandro U. Alvarez",
+  "author": "Nils",
   "license": "AGPL-3",
   "scripts": {
     "start": "npm run serve",
