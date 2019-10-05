@@ -1,8 +1,8 @@
 import express from "express";
 
-import login from './login';
+import google from './google';
 
 export const router = express.Router();
 export default router;
 
-router.post('/login', login);
+router.use('/google', google);

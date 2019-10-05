@@ -11,7 +11,7 @@ passport.use(new OAuth2Strategy({
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     callbackURL: "http://localhost:3000/auth/google/callback"
   },
-  function(token, tokenSecret, profile, done) {
+  (token, tokenSecret, profile, done) => {
       console.log('User logged in!', profile);
       const verifiedEmails = profile.emails.filter((email: any) => email.verified);
       if (verifiedEmails.length < 1) {
@@ -23,13 +23,13 @@ passport.use(new OAuth2Strategy({
   }
 ));
 
-passport.serializeUser(function(user, done) {
+passport.serializeUser((user: any, done) => {
     done(null, user);
     // if you use Model.id as your idAttribute maybe you'd want
     // done(null, user.id);
 });
 
-passport.deserializeUser(function(id, done) {
+passport.deserializeUser((id, done) => {
   // I guess get the user email?
   done(null, id);
 });
@@ -39,7 +39,7 @@ passport.deserializeUser(function(id, done) {
 //   request.  The first step in Google authentication will involve
 //   redirecting the user to google.com.  After authorization, Google
 //   will redirect the user back to this application at /auth/google/callback
-router.get('/google',
+router.get('/',
   passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/userinfo.email'] }));
 
 // GET /auth/google/callback
@@ -47,8 +47,8 @@ router.get('/google',
 //   request.  If authentication fails, the user will be redirected back to the
 //   login page.  Otherwise, the primary route function function will be called,
 //   which, in this example, will redirect the user to the home page.
-router.get('/google/callback', 
+router.get('/callback', 
   passport.authenticate('google', { failureRedirect: '/login' }),
-  function(req, res) {
+  (req, res) => {
     res.redirect('/');
-  });
+});

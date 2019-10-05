@@ -1,0 +1,1 @@
+{"version":3,"file":"current.js","sourceRoot":"","sources":["../../../src/endpoints/users/current.ts"],"names":[],"mappings":";;AAEA,kBAAe,CAAC,GAAY,EAAE,GAAa,EAAE,EAAE;IAC3C,GAAG,CAAC,IAAI,CAAC;QACL,IAAI,EAAE,GAAG;QACT,KAAK,EAAE,qBAAqB;KAC/B,CAAC,CAAC;AACP,CAAC,CAAC"}
