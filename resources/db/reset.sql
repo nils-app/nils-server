@@ -1,0 +1,3 @@
+DROP SCHEMA IF_EXISTS public;
+
+CREATE SCHEMA public;

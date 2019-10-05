@@ -1,0 +1,13 @@
+{
+    "sqltools.connections": [
+        {
+            "database": "cuwdfwxn",
+            "dialect": "PostgreSQL",
+            "name": "Nil - ElephantSQL",
+            "password": "X6PSjZXLjLmPYjs21N1A5KQ9f4vKcfSX",
+            "port": 5432,
+            "server": "manny.db.elephantsql.com",
+            "username": "cuwdfwxn"
+        }
+    ]
+}
