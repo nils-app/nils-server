@@ -1,1 +1,1 @@
-{"version":3,"file":"balance.js","sourceRoot":"","sources":["../../../src/endpoints/users/balance.ts"],"names":[],"mappings":";;AAEA,kBAAe,CAAC,GAAY,EAAE,GAAa,EAAE,EAAE;IAC3C,GAAG,CAAC,IAAI,CAAC;QACL,OAAO,EAAE,KAAK;KACjB,CAAC,CAAC;AACP,CAAC,CAAC"}
+{"version":3,"file":"balance.js","sourceRoot":"","sources":["../../../src/endpoints/users/balance.ts"],"names":[],"mappings":";;AAEA,kBAAe,CAAC,GAAY,EAAE,GAAa,EAAE,EAAE;IAC7C,GAAG,CAAC,IAAI,CAAC;QACP,OAAO,EAAE,KAAK;KACf,CAAC,CAAA;AACJ,CAAC,CAAA"}

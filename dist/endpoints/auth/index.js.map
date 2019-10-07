@@ -1,1 +1,1 @@
-{"version":3,"file":"index.js","sourceRoot":"","sources":["../../../src/endpoints/auth/index.ts"],"names":[],"mappings":";;;;;AAAA,sDAA8B;AAE9B,sDAA8B;AAEjB,QAAA,MAAM,GAAG,iBAAO,CAAC,MAAM,EAAE,CAAC;AACvC,kBAAe,cAAM,CAAC;AAEtB,cAAM,CAAC,GAAG,CAAC,SAAS,EAAE,gBAAM,CAAC,CAAC"}
+{"version":3,"file":"index.js","sourceRoot":"","sources":["../../../src/endpoints/auth/index.ts"],"names":[],"mappings":";;;;;AAAA,sDAA6B;AAE7B,sDAA6B;AAEhB,QAAA,MAAM,GAAG,iBAAO,CAAC,MAAM,EAAE,CAAA;AACtC,kBAAe,cAAM,CAAA;AAErB,cAAM,CAAC,GAAG,CAAC,SAAS,EAAE,gBAAM,CAAC,CAAA"}
