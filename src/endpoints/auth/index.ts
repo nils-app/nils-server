@@ -1,8 +1,8 @@
-import express from "express";
+import express from 'express'
 
-import google from './google';
+import google from './google'
 
-export const router = express.Router();
-export default router;
+export const router = express.Router()
+export default router
 
-router.use('/google', google);
+router.use('/google', google)

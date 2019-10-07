@@ -1,30 +1,30 @@
-import express from "express";
-import compression from "compression";
-import bodyParser from "body-parser";
-import lusca from "lusca";
-import passport from "passport";
+import express from 'express'
+import compression from 'compression'
+import bodyParser from 'body-parser'
+import lusca from 'lusca'
+import passport from 'passport'
 
-import auth from "./endpoints/auth";
-import status from "./endpoints/status";
-import users from "./endpoints/users";
+import auth from './endpoints/auth'
+import status from './endpoints/status'
+import users from './endpoints/users'
 
 // API keys and Passport configuration
 // import * as passportConfig from "./config/passport";
 
 // Create Express server
-const app = express();
+const app = express()
 
 // Express configuration
-app.set("port", process.env.PORT || 3000);
-app.use(compression());
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.set('port', process.env.PORT || 3000)
+app.use(compression())
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: true }))
 // app.use(passport.initialize());
 // app.use(passport.session());
-app.use(lusca.xframe("SAMEORIGIN"));
-app.use(lusca.xssProtection(true));
-app.use(passport.initialize());
-app.use(passport.session());
+app.use(lusca.xframe('SAMEORIGIN'))
+app.use(lusca.xssProtection(true))
+app.use(passport.initialize())
+app.use(passport.session())
 
 // app.use((req, res, next) => {
 //     res.locals.user = req.user;
@@ -49,19 +49,17 @@ app.use(passport.session());
 /**
  * Primary app routes.
  */
-app.use("/users", users);
-app.use("/auth", auth);
+app.use('/users', users)
+app.use('/auth', auth)
 
 // This endpoint must be the last one
-app.get("/", status(app));
+app.get('/', status(app))
 
 // /**
 //  * API examples routes.
 //  */
 // app.get("/api", apiController.getApi);
 // app.get("/api/facebook", passportConfig.isAuthenticated, passportConfig.isAuthorized, apiController.getFacebook);
-
-
 
 // /**
 //  * OAuth authentication routes. (Sign in)
@@ -71,4 +69,4 @@ app.get("/", status(app));
 //     res.redirect(req.session.returnTo || "/");
 // });
 
-export default app;
+export default app

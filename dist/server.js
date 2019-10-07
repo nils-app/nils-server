@@ -1,17 +1,17 @@
-"use strict";
+'use strict'
 var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const dotenv_1 = __importDefault(require("dotenv"));
-dotenv_1.default.config();
-const app_1 = __importDefault(require("./app"));
+  return (mod && mod.__esModule) ? mod : { default: mod }
+}
+Object.defineProperty(exports, '__esModule', { value: true })
+const dotenv_1 = __importDefault(require('dotenv'))
+dotenv_1.default.config()
+const app_1 = __importDefault(require('./app'))
 /**
  * Start Express server.
  */
-const server = app_1.default.listen(app_1.default.get("port"), () => {
-    console.log("  App is running at http://localhost:%d in %s mode", app_1.default.get("port"), app_1.default.get("env"));
-    console.log("  Press CTRL-C to stop\n");
-});
-exports.default = server;
-//# sourceMappingURL=server.js.map
+const server = app_1.default.listen(app_1.default.get('port'), () => {
+  console.log('  App is running at http://localhost:%d in %s mode', app_1.default.get('port'), app_1.default.get('env'))
+  console.log('  Press CTRL-C to stop\n')
+})
+exports.default = server
+// # sourceMappingURL=server.js.map
