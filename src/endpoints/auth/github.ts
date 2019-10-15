@@ -1,7 +1,7 @@
 import express from "express";
 import passport from "passport";
 
-import { OAuth2Strategy } from "passport-google-oauth";
+import { Strategy as GitHubStrategy } from "passport-github2";
 
 import { authWithProvider } from '../../lib/auth';
 
@@ -9,22 +9,19 @@ export const router = express.Router();
 export default router;
 
 passport.use(
-  new OAuth2Strategy(
+  new GitHubStrategy(
     {
-      clientID: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: "http://localhost:3000/auth/google/callback"
+      clientID: process.env.GITHUB_CLIENT_ID,
+      clientSecret: process.env.GITHUB_CLIENT_SECRET,
+      callbackURL: "http://localhost:3000/auth/github/callback",
+      scope: [ 'user:email' ], // fetches non-public emails as well
     },
-    (token, tokenSecret, profile, done) => {
-      const verifiedEmails = profile.emails
-        .filter((email: any) => email.verified)
-        .map((email: any) => email.value);
-
-      if (verifiedEmails.length < 1) {
-        return done(new Error('No verified emails'), null);
+    (accessToken: string, refreshToken: string, profile: any, done: any) => {
+      let email = null;
+      if (profile.emails && profile.emails[0]) {
+        email = profile.emails[0].value;
       }
-
-      const user_id = authWithProvider('google', profile.id, verifiedEmails[0]);
+      const user_id = authWithProvider('github', profile.id, email);
       
       return done(null, user_id);
     }
@@ -46,8 +43,8 @@ passport.deserializeUser((id, done) => {
 //   will redirect the user back to this application at /auth/google/callback
 router.get(
   "/",
-  passport.authenticate("google", {
-    scope: ["https://www.googleapis.com/auth/userinfo.email"]
+  passport.authenticate("github", {
+    scope: [ 'user:email' ]
   })
 );
 
@@ -58,7 +55,7 @@ router.get(
 //   which, in this example, will redirect the user to the home page.
 router.get(
   "/callback",
-  passport.authenticate("google", { failureRedirect: "/login" }),
+  passport.authenticate("github", { failureRedirect: "/login" }),
   (req, res) => {
     res.redirect("/");
   }

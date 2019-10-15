@@ -5,22 +5,21 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const passport_1 = __importDefault(require("passport"));
-const passport_google_oauth_1 = require("passport-google-oauth");
+const passport_github2_1 = require("passport-github2");
 const auth_1 = require("../../lib/auth");
 exports.router = express_1.default.Router();
 exports.default = exports.router;
-passport_1.default.use(new passport_google_oauth_1.OAuth2Strategy({
-    clientID: process.env.GOOGLE_CLIENT_ID,
-    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: "http://localhost:3000/auth/google/callback"
-}, (token, tokenSecret, profile, done) => {
-    const verifiedEmails = profile.emails
-        .filter((email) => email.verified)
-        .map((email) => email.value);
-    if (verifiedEmails.length < 1) {
-        return done(new Error('No verified emails'), null);
+passport_1.default.use(new passport_github2_1.Strategy({
+    clientID: process.env.GITHUB_CLIENT_ID,
+    clientSecret: process.env.GITHUB_CLIENT_SECRET,
+    callbackURL: "http://localhost:3000/auth/github/callback",
+    scope: ['user:email'],
+}, (accessToken, refreshToken, profile, done) => {
+    let email = null;
+    if (profile.emails && profile.emails[0]) {
+        email = profile.emails[0].value;
     }
-    const user_id = auth_1.authWithProvider('google', profile.id, verifiedEmails[0]);
+    const user_id = auth_1.authWithProvider('github', profile.id, email);
     return done(null, user_id);
 }));
 passport_1.default.serializeUser((user, done) => {
@@ -34,15 +33,15 @@ passport_1.default.deserializeUser((id, done) => {
 //   request.  The first step in Google authentication will involve
 //   redirecting the user to google.com.  After authorization, Google
 //   will redirect the user back to this application at /auth/google/callback
-exports.router.get("/", passport_1.default.authenticate("google", {
-    scope: ["https://www.googleapis.com/auth/userinfo.email"]
+exports.router.get("/", passport_1.default.authenticate("github", {
+    scope: ['user:email']
 }));
 // GET /auth/google/callback
 //   Use passport.authenticate() as route middleware to authenticate the
 //   request.  If authentication fails, the user will be redirected back to the
 //   login page.  Otherwise, the primary route function function will be called,
 //   which, in this example, will redirect the user to the home page.
-exports.router.get("/callback", passport_1.default.authenticate("google", { failureRedirect: "/login" }), (req, res) => {
+exports.router.get("/callback", passport_1.default.authenticate("github", { failureRedirect: "/login" }), (req, res) => {
     res.redirect("/");
 });
-//# sourceMappingURL=google.js.map
+//# sourceMappingURL=github.js.map

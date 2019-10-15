@@ -1,9 +1,23 @@
 CREATE TABLE users (  
     uuid UUID DEFAULT gen_random_uuid() NOT NULL,
-    email text NOT NULL,
     balance int DEFAULT 0 NOT NULL,
     created_on timestamp with time zone DEFAULT now() NOT NULL,
     PRIMARY KEY (uuid)
+);
+
+CREATE TABLE user_email (  
+    user_id UUID NOT NULL,
+    email text NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users (uuid) ON DELETE CASCADE,
+    UNIQUE (email)
+);
+
+CREATE TABLE user_logins (  
+    user_id UUID NOT NULL,
+    auth_provider text NOT NULL,
+    token text NOT NULL,
+    PRIMARY KEY (user_id, auth_provider),
+    FOREIGN KEY (user_id) REFERENCES users (uuid) ON DELETE CASCADE
 );
 
 CREATE TABLE domains (  
