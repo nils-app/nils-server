@@ -22,12 +22,6 @@ passport_1.default.use(new passport_github2_1.Strategy({
     const user_id = auth_1.authWithProvider('github', profile.id, email);
     return done(null, user_id);
 }));
-passport_1.default.serializeUser((user, done) => {
-    done(null, user);
-});
-passport_1.default.deserializeUser((id, done) => {
-    done(null, id);
-});
 exports.router.get("/", passport_1.default.authenticate("github", {
     scope: ['user:email']
 }));

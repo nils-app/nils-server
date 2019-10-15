@@ -28,14 +28,6 @@ passport.use(
   )
 );
 
-passport.serializeUser((user: any, done) => {
-  done(null, user);
-});
-
-passport.deserializeUser((id, done) => {
-  done(null, id);
-});
-
 router.get(
   "/",
   passport.authenticate("github", {

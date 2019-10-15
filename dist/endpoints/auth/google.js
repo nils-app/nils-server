@@ -23,12 +23,6 @@ passport_1.default.use(new passport_google_oauth_1.OAuth2Strategy({
     const user_id = auth_1.authWithProvider('google', profile.id, verifiedEmails[0]);
     return done(null, user_id);
 }));
-passport_1.default.serializeUser((user, done) => {
-    done(null, user);
-});
-passport_1.default.deserializeUser((id, done) => {
-    done(null, id);
-});
 exports.router.get("/", passport_1.default.authenticate("google", {
     scope: ["https://www.googleapis.com/auth/userinfo.email"]
 }));
