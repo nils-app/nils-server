@@ -9,23 +9,29 @@ import auth from './endpoints/auth'
 import status from './endpoints/status'
 import users from './endpoints/users'
 import { checkSession } from './middleware/auth'
+import { PORT, ENV } from './constants'
 
 // Create Express server
 const app = express()
 
 // Express configuration
-app.set('port', process.env.PORT || 3000)
+app.set('port', PORT)
+app.set('env', ENV)
 
 app.use(compression())
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
-app.use(lusca.xframe('SAMEORIGIN'))
-app.use(lusca.xssProtection(true))
-
+// Session management
 app.use(passport.initialize())
 app.use(cookieParser())
+
+// Security settings
+app.use(lusca.xssProtection(true))
+app.use(lusca.xframe('SAMEORIGIN'))
+app.use(lusca.nosniff());
+
 /**
  * Primary app routes.
  */

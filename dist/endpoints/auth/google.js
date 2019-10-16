@@ -17,11 +17,12 @@ const passport_1 = __importDefault(require("passport"));
 const passport_google_oauth_1 = require("passport-google-oauth");
 const auth_1 = require("../../lib/auth");
 const auth_2 = require("../../middleware/auth");
+const constants_1 = require("../../constants");
 exports.router = express_1.default.Router();
 exports.default = exports.router;
 passport_1.default.use(new passport_google_oauth_1.OAuth2Strategy({
-    clientID: process.env.GOOGLE_CLIENT_ID,
-    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    clientID: constants_1.GOOGLE_CLIENT_ID,
+    clientSecret: constants_1.GOOGLE_CLIENT_SECRET,
     callbackURL: "http://localhost:3000/auth/google/callback"
 }, (token, tokenSecret, profile, done) => __awaiter(void 0, void 0, void 0, function* () {
     const verifiedEmails = profile.emails

@@ -8,8 +8,7 @@ const app_1 = __importDefault(require("./app"));
  * Start Express server.
  */
 const server = app_1.default.listen(app_1.default.get('port'), () => {
-    console.log('App is running at http://localhost:%d in %s mode', app_1.default.get('port'), app_1.default.get('env'));
-    console.log('  Press CTRL-C to stop\n');
+    console.log('[%s] App is running at http://localhost:%d', app_1.default.get('env'), app_1.default.get('port'));
 });
 exports.default = server;
 //# sourceMappingURL=server.js.map

@@ -5,6 +5,7 @@ import { Strategy as GitHubStrategy } from "passport-github2";
 
 import { authWithProvider } from '../../lib/auth';
 import { storeSession } from '../../middleware/auth';
+import { GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET } from '../../constants';
 
 export const router = express.Router();
 export default router;
@@ -12,8 +13,8 @@ export default router;
 passport.use(
   new GitHubStrategy(
     {
-      clientID: process.env.GITHUB_CLIENT_ID,
-      clientSecret: process.env.GITHUB_CLIENT_SECRET,
+      clientID: GITHUB_CLIENT_ID,
+      clientSecret: GITHUB_CLIENT_SECRET,
       callbackURL: "http://localhost:3000/auth/github/callback",
       scope: [ 'user:email' ], // fetches non-public emails as well
     },

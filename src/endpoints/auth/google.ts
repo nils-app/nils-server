@@ -5,6 +5,7 @@ import { OAuth2Strategy } from "passport-google-oauth";
 
 import { authWithProvider } from '../../lib/auth';
 import { storeSession } from '../../middleware/auth';
+import { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET } from '../../constants';
 
 export const router = express.Router();
 export default router;
@@ -12,8 +13,8 @@ export default router;
 passport.use(
   new OAuth2Strategy(
     {
-      clientID: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      clientID: GOOGLE_CLIENT_ID,
+      clientSecret: GOOGLE_CLIENT_SECRET,
       callbackURL: "http://localhost:3000/auth/google/callback"
     },
     async (token, tokenSecret, profile, done) => {

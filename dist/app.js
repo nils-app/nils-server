@@ -13,17 +13,22 @@ const auth_1 = __importDefault(require("./endpoints/auth"));
 const status_1 = __importDefault(require("./endpoints/status"));
 const users_1 = __importDefault(require("./endpoints/users"));
 const auth_2 = require("./middleware/auth");
+const constants_1 = require("./constants");
 // Create Express server
 const app = express_1.default();
 // Express configuration
-app.set('port', process.env.PORT || 3000);
+app.set('port', constants_1.PORT);
+app.set('env', constants_1.ENV);
 app.use(compression_1.default());
 app.use(body_parser_1.default.json());
 app.use(body_parser_1.default.urlencoded({ extended: true }));
-app.use(lusca_1.default.xframe('SAMEORIGIN'));
-app.use(lusca_1.default.xssProtection(true));
+// Session management
 app.use(passport_1.default.initialize());
 app.use(cookie_parser_1.default());
+// Security settings
+app.use(lusca_1.default.xssProtection(true));
+app.use(lusca_1.default.xframe('SAMEORIGIN'));
+app.use(lusca_1.default.nosniff());
 /**
  * Primary app routes.
  */
