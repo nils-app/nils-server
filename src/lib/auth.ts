@@ -1,5 +1,6 @@
 import db from '../db'
 
+
 /**
  * Check if a user exists in our db with a provider and an email
  * and creates the user if not

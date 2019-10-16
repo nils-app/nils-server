@@ -8,19 +8,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const db_1 = __importDefault(require("../../db"));
 exports.default = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const { rows } = yield db_1.default.query('SELECT * FROM users');
-        console.log('query returned', rows);
-        res.json(rows);
-    }
-    catch (e) {
-        res.status(500).send('Unable to get users');
-    }
+    res.json(req.user);
 });
 //# sourceMappingURL=current.js.map

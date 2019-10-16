@@ -3,10 +3,12 @@ import compression from 'compression'
 import bodyParser from 'body-parser'
 import lusca from 'lusca'
 import passport from 'passport'
+import cookieParser from 'cookie-parser'
 
 import auth from './endpoints/auth'
 import status from './endpoints/status'
 import users from './endpoints/users'
+import { checkSession } from './middleware/auth'
 
 // Create Express server
 const app = express()
@@ -23,12 +25,11 @@ app.use(lusca.xframe('SAMEORIGIN'))
 app.use(lusca.xssProtection(true))
 
 app.use(passport.initialize())
-app.use(passport.session())
-
+app.use(cookieParser())
 /**
  * Primary app routes.
  */
-app.use('/users', users)
+app.use('/users', checkSession, users)
 app.use('/auth', auth)
 
 // This endpoint must be the last one

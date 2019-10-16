@@ -4,6 +4,7 @@ import passport from "passport";
 import { OAuth2Strategy } from "passport-google-oauth";
 
 import { authWithProvider } from '../../lib/auth';
+import { storeSession } from '../../middleware/auth';
 
 export const router = express.Router();
 export default router;
@@ -15,7 +16,7 @@ passport.use(
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
       callbackURL: "http://localhost:3000/auth/google/callback"
     },
-    (token, tokenSecret, profile, done) => {
+    async (token, tokenSecret, profile, done) => {
       const verifiedEmails = profile.emails
         .filter((email: any) => email.verified)
         .map((email: any) => email.value);
@@ -24,7 +25,7 @@ passport.use(
         return done(new Error('No verified emails'), null);
       }
 
-      const user_id = authWithProvider('google', profile.id, verifiedEmails[0]);
+      const user_id = await authWithProvider('google', profile.id, verifiedEmails[0]);
       
       return done(null, user_id);
     }
@@ -42,7 +43,5 @@ router.get(
 router.get(
   "/callback",
   passport.authenticate("google", { failureRedirect: "/login" }),
-  (req, res) => {
-    res.redirect("/");
-  }
+  storeSession,
 );
