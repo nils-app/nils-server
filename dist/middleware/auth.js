@@ -17,10 +17,10 @@ const passport_jwt_1 = require("passport-jwt");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const db_1 = __importDefault(require("../db"));
 const constants_1 = require("../constants");
-const JWT_COOKIE = 'jwt';
+exports.JWT_COOKIE = 'jwt';
 const JWT_MIDDLEWARE = 'jwt';
 const opts = {
-    jwtFromRequest: (req) => req.cookies ? req.cookies[JWT_COOKIE] : null,
+    jwtFromRequest: (req) => req.cookies ? req.cookies[exports.JWT_COOKIE] : null,
     secretOrKey: constants_1.JWT_SECRET,
 };
 passport_1.default.use(JWT_MIDDLEWARE, new passport_jwt_1.Strategy(opts, (jwtPayload, done) => __awaiter(void 0, void 0, void 0, function* () {
@@ -53,7 +53,7 @@ exports.storeSession = (req, res) => {
     };
     const token = jsonwebtoken_1.default.sign(JSON.stringify(payload), constants_1.JWT_SECRET);
     const secure = constants_1.ENV === 'production';
-    res.cookie(JWT_COOKIE, token, { httpOnly: true, secure, });
+    res.cookie(exports.JWT_COOKIE, token, { httpOnly: true, secure, });
     res.status(200).send({ payload });
 };
 //# sourceMappingURL=auth.js.map

@@ -6,10 +6,10 @@ import jwt from 'jsonwebtoken';
 import db from '../db'
 import { JWT_SECRET, JWT_EXPIRATION_MS, ENV } from '../constants';
 
-const JWT_COOKIE = 'jwt';
+export const JWT_COOKIE = 'jwt';
 const JWT_MIDDLEWARE = 'jwt';
 
-type JWT_PAYLOAD = {
+export type JWT_PAYLOAD = {
   expires: number,
   uuid: string,
 };
