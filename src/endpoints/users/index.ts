@@ -11,6 +11,6 @@ export default router
 
 router.get('/balance', balance)
 router.put('/block', block)
-router.post('/pay', pay)
+router.post('/pay', ...pay)
 router.put('/unblock', unblock)
 router.get('/current', current)
