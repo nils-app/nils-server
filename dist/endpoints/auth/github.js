@@ -21,21 +21,23 @@ const constants_1 = require("../../constants");
 exports.router = express_1.default.Router();
 exports.default = exports.router;
 exports.PROVIDER = 'github';
-passport_1.default.use(new passport_github2_1.Strategy({
-    clientID: constants_1.GITHUB_CLIENT_ID,
-    clientSecret: constants_1.GITHUB_CLIENT_SECRET,
-    callbackURL: `${constants_1.DOMAIN}/auth/${exports.PROVIDER}/callback`,
-    scope: ['user:email'],
-}, (accessToken, refreshToken, profile, done) => __awaiter(void 0, void 0, void 0, function* () {
-    let email = null;
-    if (profile.emails && profile.emails[0]) {
-        email = profile.emails[0].value;
-    }
-    const user_id = yield auth_1.authWithProvider(exports.PROVIDER, profile.id, email);
-    return done(null, user_id);
-})));
-exports.router.get("/", passport_1.default.authenticate(exports.PROVIDER, {
-    scope: ['user:email']
-}));
-exports.router.get("/callback", passport_1.default.authenticate(exports.PROVIDER, { failureRedirect: "/login" }), auth_2.storeSession);
+if (constants_1.GITHUB_CLIENT_ID) {
+    passport_1.default.use(new passport_github2_1.Strategy({
+        clientID: constants_1.GITHUB_CLIENT_ID,
+        clientSecret: constants_1.GITHUB_CLIENT_SECRET,
+        callbackURL: `${constants_1.DOMAIN}/auth/${exports.PROVIDER}/callback`,
+        scope: ['user:email'],
+    }, (accessToken, refreshToken, profile, done) => __awaiter(void 0, void 0, void 0, function* () {
+        let email = null;
+        if (profile.emails && profile.emails[0]) {
+            email = profile.emails[0].value;
+        }
+        const user_id = yield auth_1.authWithProvider(exports.PROVIDER, profile.id, email);
+        return done(null, user_id);
+    })));
+    exports.router.get("/", passport_1.default.authenticate(exports.PROVIDER, {
+        scope: ['user:email']
+    }));
+    exports.router.get("/callback", passport_1.default.authenticate(exports.PROVIDER, { failureRedirect: "/login" }), auth_2.storeSession);
+}
 //# sourceMappingURL=github.js.map
