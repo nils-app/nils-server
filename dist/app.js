@@ -13,6 +13,7 @@ const auth_1 = __importDefault(require("./endpoints/auth"));
 const status_1 = __importDefault(require("./endpoints/status"));
 const users_1 = __importDefault(require("./endpoints/users"));
 const auth_2 = require("./middleware/auth");
+const csrf_1 = require("./middleware/csrf");
 const constants_1 = require("./constants");
 // Create Express server
 const app = express_1.default();
@@ -32,7 +33,7 @@ app.use(lusca_1.default.nosniff());
 /**
  * Primary app routes.
  */
-app.use('/users', auth_2.checkSession, users_1.default);
+app.use('/users', auth_2.checkSession, csrf_1.checkCSRF, users_1.default);
 app.use('/auth', auth_1.default);
 // This endpoint must be the last one
 app.get('/', status_1.default(app));

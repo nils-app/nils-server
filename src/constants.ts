@@ -1,5 +1,6 @@
 export const PORT = process.env.PORT || 3000;
 export const ENV = process.env.ENV || 'development';
+export const DOMAIN = process.env.DOMAIN || 'http://nils.local';
 
 export const GITHUB_CLIENT_ID = process.env.GITHUB_CLIENT_ID;
 export const GITHUB_CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET;

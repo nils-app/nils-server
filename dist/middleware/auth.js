@@ -27,11 +27,13 @@ passport_1.default.use(JWT_MIDDLEWARE, new passport_jwt_1.Strategy(opts, (jwtPay
     if (Date.now() > jwtPayload.expires) {
         return done('Session expired');
     }
+    const uuid = jwtPayload.uuid;
+    if (!uuid) {
+        return done('Invalid user, please login again');
+    }
     try {
-        const uuid = jwtPayload.uuid;
         const data = yield db_1.default.query('SELECT uuid, balance, created_on FROM users WHERE uuid = $1', [uuid]);
         if (data.rows.length < 1) {
-            console.log('User not found in db');
             done(null, false);
             return;
         }

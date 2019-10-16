@@ -20,10 +20,11 @@ const auth_2 = require("../../middleware/auth");
 const constants_1 = require("../../constants");
 exports.router = express_1.default.Router();
 exports.default = exports.router;
+const PROVIDER = 'google';
 passport_1.default.use(new passport_google_oauth_1.OAuth2Strategy({
     clientID: constants_1.GOOGLE_CLIENT_ID,
     clientSecret: constants_1.GOOGLE_CLIENT_SECRET,
-    callbackURL: "http://localhost:3000/auth/google/callback"
+    callbackURL: `${constants_1.DOMAIN}/auth/${PROVIDER}/callback`
 }, (token, tokenSecret, profile, done) => __awaiter(void 0, void 0, void 0, function* () {
     const verifiedEmails = profile.emails
         .filter((email) => email.verified)
@@ -31,12 +32,12 @@ passport_1.default.use(new passport_google_oauth_1.OAuth2Strategy({
     if (verifiedEmails.length < 1) {
         return done(new Error('No verified emails'), null);
     }
-    const user_id = yield auth_1.authWithProvider('google', profile.id, verifiedEmails[0]);
+    const user_id = yield auth_1.authWithProvider(PROVIDER, profile.id, verifiedEmails[0]);
     return done(null, user_id);
 })));
-exports.router.get("/", passport_1.default.authenticate("google", {
+exports.router.get("/", passport_1.default.authenticate(PROVIDER, {
     scope: ["https://www.googleapis.com/auth/userinfo.email"]
 }));
 // TODO Update redirect URL
-exports.router.get("/callback", passport_1.default.authenticate("google", { failureRedirect: "/login" }), auth_2.storeSession);
+exports.router.get("/callback", passport_1.default.authenticate(PROVIDER, { failureRedirect: "/login" }), auth_2.storeSession);
 //# sourceMappingURL=google.js.map

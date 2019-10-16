@@ -9,6 +9,7 @@ import auth from './endpoints/auth'
 import status from './endpoints/status'
 import users from './endpoints/users'
 import { checkSession } from './middleware/auth'
+import { checkCSRF } from './middleware/csrf'
 import { PORT, ENV } from './constants'
 
 // Create Express server
@@ -35,7 +36,7 @@ app.use(lusca.nosniff());
 /**
  * Primary app routes.
  */
-app.use('/users', checkSession, users)
+app.use('/users', checkSession, checkCSRF, users)
 app.use('/auth', auth)
 
 // This endpoint must be the last one

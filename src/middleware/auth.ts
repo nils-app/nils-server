@@ -1,4 +1,4 @@
-import { Response, Request, NextFunction } from 'express'
+import { Response, Request } from 'express'
 import passport from 'passport';
 import { Strategy as JWTstrategy, StrategyOptions as JWTStrategyOptions } from 'passport-jwt';
 import jwt from 'jsonwebtoken';
@@ -25,13 +25,15 @@ passport.use(
     if (Date.now() > jwtPayload.expires) {
       return done('Session expired');
     }
+    const uuid = jwtPayload.uuid;
+    if (!uuid) {
+      return done('Invalid user, please login again');
+    }
 
     try {
-      const uuid = jwtPayload.uuid;
       const data = await db.query('SELECT uuid, balance, created_on FROM users WHERE uuid = $1', [uuid]);
 
       if (data.rows.length < 1) {
-        console.log('User not found in db');
         done(null, false);
         return;
       }

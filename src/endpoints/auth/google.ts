@@ -5,17 +5,19 @@ import { OAuth2Strategy } from "passport-google-oauth";
 
 import { authWithProvider } from '../../lib/auth';
 import { storeSession } from '../../middleware/auth';
-import { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET } from '../../constants';
+import { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, DOMAIN } from '../../constants';
 
 export const router = express.Router();
 export default router;
+
+const PROVIDER = 'google';
 
 passport.use(
   new OAuth2Strategy(
     {
       clientID: GOOGLE_CLIENT_ID,
       clientSecret: GOOGLE_CLIENT_SECRET,
-      callbackURL: "http://localhost:3000/auth/google/callback"
+      callbackURL: `${DOMAIN}/auth/${PROVIDER}/callback`
     },
     async (token, tokenSecret, profile, done) => {
       const verifiedEmails = profile.emails
@@ -26,7 +28,7 @@ passport.use(
         return done(new Error('No verified emails'), null);
       }
 
-      const user_id = await authWithProvider('google', profile.id, verifiedEmails[0]);
+      const user_id = await authWithProvider(PROVIDER, profile.id, verifiedEmails[0]);
       
       return done(null, user_id);
     }
@@ -35,7 +37,7 @@ passport.use(
 
 router.get(
   "/",
-  passport.authenticate("google", {
+  passport.authenticate(PROVIDER, {
     scope: ["https://www.googleapis.com/auth/userinfo.email"]
   })
 );
@@ -43,6 +45,6 @@ router.get(
 // TODO Update redirect URL
 router.get(
   "/callback",
-  passport.authenticate("google", { failureRedirect: "/login" }),
+  passport.authenticate(PROVIDER, { failureRedirect: "/login" }),
   storeSession,
 );
