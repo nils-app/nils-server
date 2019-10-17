@@ -36,7 +36,7 @@ if (GITHUB_CLIENT_ID) {
   router.get('/', (req, res, next) => {
     const { returnTo } = req.query
     const state = returnTo
-      ? new Buffer(JSON.stringify({ returnTo })).toString('base64')
+      ? Buffer.from(JSON.stringify({ returnTo })).toString('base64')
       : undefined
 
     passport.authenticate(PROVIDER, { scope: [ 'user:email' ], state })(req, res, next)
@@ -44,7 +44,7 @@ if (GITHUB_CLIENT_ID) {
   
   router.get(
     "/callback",
-    passport.authenticate(PROVIDER, { failureRedirect: "/login" }),
+    passport.authenticate(PROVIDER, { failureRedirect: "/" }),
     storeSession,
   );
   

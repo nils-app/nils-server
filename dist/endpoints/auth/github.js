@@ -38,10 +38,10 @@ if (constants_1.GITHUB_CLIENT_ID) {
     exports.router.get('/', (req, res, next) => {
         const { returnTo } = req.query;
         const state = returnTo
-            ? new Buffer(JSON.stringify({ returnTo })).toString('base64')
+            ? Buffer.from(JSON.stringify({ returnTo })).toString('base64')
             : undefined;
         passport_1.default.authenticate(exports.PROVIDER, { scope: ['user:email'], state })(req, res, next);
     });
-    exports.router.get("/callback", passport_1.default.authenticate(exports.PROVIDER, { failureRedirect: "/login" }), middleware_1.storeSession);
+    exports.router.get("/callback", passport_1.default.authenticate(exports.PROVIDER, { failureRedirect: "/" }), middleware_1.storeSession);
 }
 //# sourceMappingURL=github.js.map

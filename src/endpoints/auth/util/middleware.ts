@@ -20,7 +20,7 @@ export const storeSession = (req: Request, res: Response) => {
   // Check for any redirection path set when logging in
   try {
     const { state } = req.query
-    const { returnTo } = JSON.parse(new Buffer(state, 'base64').toString())
+    const { returnTo } = JSON.parse(Buffer.from(state, 'base64').toString())
     if (typeof returnTo === 'string') {
       return res.redirect(returnTo)
     }
