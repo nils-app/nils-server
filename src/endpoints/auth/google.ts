@@ -3,8 +3,8 @@ import passport from "passport";
 
 import { OAuth2Strategy } from "passport-google-oauth";
 
-import { authWithProvider } from '../../lib/auth';
-import { storeSession } from '../../middleware/auth';
+import { authWithProvider } from './util/auth';
+import { storeSession } from './util/middleware';
 import { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, DOMAIN } from '../../constants';
 
 export const router = express.Router();

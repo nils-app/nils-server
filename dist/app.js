@@ -12,9 +12,9 @@ const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const auth_1 = __importDefault(require("./endpoints/auth"));
 const status_1 = __importDefault(require("./endpoints/status"));
 const users_1 = __importDefault(require("./endpoints/users"));
-const auth_2 = require("./middleware/auth");
 const csrf_1 = require("./middleware/csrf");
 const constants_1 = require("./constants");
+const auth_2 = require("./middleware/auth");
 // Create Express server
 const app = express_1.default();
 // Express configuration

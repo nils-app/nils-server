@@ -15,8 +15,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const passport_1 = __importDefault(require("passport"));
 const passport_github2_1 = require("passport-github2");
-const auth_1 = require("../../lib/auth");
-const auth_2 = require("../../middleware/auth");
+const auth_1 = require("./util/auth");
+const middleware_1 = require("./util/middleware");
 const constants_1 = require("../../constants");
 exports.router = express_1.default.Router();
 exports.default = exports.router;
@@ -35,9 +35,13 @@ if (constants_1.GITHUB_CLIENT_ID) {
         const user_id = yield auth_1.authWithProvider(exports.PROVIDER, profile.id, email);
         return done(null, user_id);
     })));
-    exports.router.get("/", passport_1.default.authenticate(exports.PROVIDER, {
-        scope: ['user:email']
-    }));
-    exports.router.get("/callback", passport_1.default.authenticate(exports.PROVIDER, { failureRedirect: "/login" }), auth_2.storeSession);
+    exports.router.get('/', (req, res, next) => {
+        const { returnTo } = req.query;
+        const state = returnTo
+            ? new Buffer(JSON.stringify({ returnTo })).toString('base64')
+            : undefined;
+        passport_1.default.authenticate(exports.PROVIDER, { scope: ['user:email'], state })(req, res, next);
+    });
+    exports.router.get("/callback", passport_1.default.authenticate(exports.PROVIDER, { failureRedirect: "/login" }), middleware_1.storeSession);
 }
 //# sourceMappingURL=github.js.map

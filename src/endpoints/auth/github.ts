@@ -3,8 +3,8 @@ import passport from "passport";
 
 import { Strategy as GitHubStrategy } from "passport-github2";
 
-import { authWithProvider } from '../../lib/auth';
-import { storeSession } from '../../middleware/auth';
+import { authWithProvider } from './util/auth';
+import { storeSession } from './util/middleware';
 import { GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET, DOMAIN } from '../../constants';
 
 export const router = express.Router();
@@ -32,13 +32,15 @@ if (GITHUB_CLIENT_ID) {
       }
     )
   );
-  
-  router.get(
-    "/",
-    passport.authenticate(PROVIDER, {
-      scope: [ 'user:email' ]
-    })
-  );
+
+  router.get('/', (req, res, next) => {
+    const { returnTo } = req.query
+    const state = returnTo
+      ? new Buffer(JSON.stringify({ returnTo })).toString('base64')
+      : undefined
+
+    passport.authenticate(PROVIDER, { scope: [ 'user:email' ], state })(req, res, next)
+  })
   
   router.get(
     "/callback",

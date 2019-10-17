@@ -12,18 +12,18 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const passport = require("passport");
+const passport_1 = __importDefault(require("passport"));
 const passport_jwt_1 = require("passport-jwt");
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const db_1 = __importDefault(require("../db"));
 const constants_1 = require("../constants");
-const middleware_1 = require("../endpoints/auth/util/middleware");
-exports.JWT_MIDDLEWARE = 'jwt';
-exports.checkSession = passport.authenticate(exports.JWT_MIDDLEWARE, { session: false });
+exports.JWT_COOKIE = 'jwt';
+const JWT_MIDDLEWARE = 'jwt';
 const opts = {
-    jwtFromRequest: (req) => req.cookies ? req.cookies[middleware_1.JWT_COOKIE] : null,
+    jwtFromRequest: (req) => req.cookies ? req.cookies[exports.JWT_COOKIE] : null,
     secretOrKey: constants_1.JWT_SECRET,
 };
-passport.use(exports.JWT_MIDDLEWARE, new passport_jwt_1.Strategy(opts, (jwtPayload, done) => __awaiter(void 0, void 0, void 0, function* () {
+passport_1.default.use(JWT_MIDDLEWARE, new passport_jwt_1.Strategy(opts, (jwtPayload, done) => __awaiter(void 0, void 0, void 0, function* () {
     if (Date.now() > jwtPayload.expires) {
         return done('Session expired');
     }
@@ -44,4 +44,16 @@ passport.use(exports.JWT_MIDDLEWARE, new passport_jwt_1.Strategy(opts, (jwtPaylo
         done(err);
     }
 })));
-//# sourceMappingURL=auth.js.map
+exports.checkSession = passport_1.default.authenticate(JWT_MIDDLEWARE, { session: false });
+exports.storeSession = (req, res) => {
+    const uuid = req.user;
+    const payload = {
+        uuid,
+        expires: Date.now() + parseInt(constants_1.JWT_EXPIRATION_MS, 10),
+    };
+    const token = jsonwebtoken_1.default.sign(JSON.stringify(payload), constants_1.JWT_SECRET);
+    const secure = constants_1.ENV === 'production';
+    res.cookie(exports.JWT_COOKIE, token, { httpOnly: true, secure, });
+    res.status(200).send({ payload });
+};
+//# sourceMappingURL=middleware.js.map

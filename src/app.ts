@@ -8,9 +8,9 @@ import cookieParser from 'cookie-parser'
 import auth from './endpoints/auth'
 import status from './endpoints/status'
 import users from './endpoints/users'
-import { checkSession } from './middleware/auth'
 import { checkCSRF } from './middleware/csrf'
 import { PORT, ENV } from './constants'
+import { checkSession } from './middleware/auth'
 
 // Create Express server
 const app = express()

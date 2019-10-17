@@ -1,18 +1,17 @@
+import passport = require("passport");
 import { Response, Request } from 'express'
-import passport from 'passport';
 import { Strategy as JWTstrategy, StrategyOptions as JWTStrategyOptions } from 'passport-jwt';
-import jwt from 'jsonwebtoken';
 
 import db from '../db'
-import { JWT_SECRET, JWT_EXPIRATION_MS, ENV } from '../constants';
-
-export const JWT_COOKIE = 'jwt';
-const JWT_MIDDLEWARE = 'jwt';
+import { JWT_SECRET, JWT_EXPIRATION_MS, ENV } from "../constants";
+import { JWT_COOKIE } from "../endpoints/auth/util/middleware";
 
 export type JWT_PAYLOAD = {
   expires: number,
   uuid: string,
 };
+export const JWT_MIDDLEWARE = 'jwt';
+export const checkSession = passport.authenticate(JWT_MIDDLEWARE, {session: false});
 
 const opts: JWTStrategyOptions = {
   jwtFromRequest: (req: Request) => req.cookies ? req.cookies[JWT_COOKIE] : null,
@@ -45,19 +44,3 @@ passport.use(
     }
   }),
 );
-
-export const checkSession = passport.authenticate(JWT_MIDDLEWARE, {session: false});
-
-export const storeSession = (req: Request, res: Response) => {
-  const uuid: any = req.user;
-  const payload: JWT_PAYLOAD = {
-    uuid,
-    expires: Date.now() + parseInt(JWT_EXPIRATION_MS, 10),
-  };
-
-  const token = jwt.sign(JSON.stringify(payload), JWT_SECRET);
-  const secure = ENV === 'production';
-  res.cookie(JWT_COOKIE, token, { httpOnly: true, secure, });
-  
-  res.status(200).send({ payload });
-};

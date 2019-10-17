@@ -15,8 +15,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const passport_1 = __importDefault(require("passport"));
 const passport_google_oauth_1 = require("passport-google-oauth");
-const auth_1 = require("../../lib/auth");
-const auth_2 = require("../../middleware/auth");
+const auth_1 = require("./util/auth");
+const middleware_1 = require("./util/middleware");
 const constants_1 = require("../../constants");
 exports.router = express_1.default.Router();
 exports.default = exports.router;
@@ -40,6 +40,6 @@ if (constants_1.GOOGLE_CLIENT_ID) {
         scope: ["https://www.googleapis.com/auth/userinfo.email"]
     }));
     // TODO Update redirect URL
-    exports.router.get("/callback", passport_1.default.authenticate(PROVIDER, { failureRedirect: "/login" }), auth_2.storeSession);
+    exports.router.get("/callback", passport_1.default.authenticate(PROVIDER, { failureRedirect: "/login" }), middleware_1.storeSession);
 }
 //# sourceMappingURL=google.js.map
