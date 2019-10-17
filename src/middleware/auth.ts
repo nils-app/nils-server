@@ -3,7 +3,7 @@ import { Response, Request } from 'express'
 import { Strategy as JWTstrategy, StrategyOptions as JWTStrategyOptions } from 'passport-jwt';
 
 import db from '../db'
-import { JWT_SECRET, JWT_EXPIRATION_MS, ENV } from "../constants";
+import { JWT_SECRET } from "../constants";
 import { JWT_COOKIE } from "../endpoints/auth/util/middleware";
 
 export type JWT_PAYLOAD = {
@@ -33,7 +33,7 @@ passport.use(
       const data = await db.query('SELECT uuid, balance, created_on FROM users WHERE uuid = $1', [uuid]);
 
       if (data.rows.length < 1) {
-        done(null, false);
+        done(null, 'Please login again');
         return;
       }
 

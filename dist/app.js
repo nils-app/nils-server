@@ -9,6 +9,7 @@ const body_parser_1 = __importDefault(require("body-parser"));
 const lusca_1 = __importDefault(require("lusca"));
 const passport_1 = __importDefault(require("passport"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
+const cors_1 = __importDefault(require("cors"));
 const auth_1 = __importDefault(require("./endpoints/auth"));
 const status_1 = __importDefault(require("./endpoints/status"));
 const users_1 = __importDefault(require("./endpoints/users"));
@@ -21,6 +22,11 @@ const app = express_1.default();
 app.set('port', constants_1.PORT);
 app.set('env', constants_1.ENV);
 app.use(compression_1.default());
+const corsOptions = {
+    origin: true,
+    credentials: true,
+};
+app.use(cors_1.default(corsOptions));
 app.use(body_parser_1.default.json());
 app.use(body_parser_1.default.urlencoded({ extended: true }));
 // Session management
@@ -30,6 +36,7 @@ app.use(cookie_parser_1.default());
 app.use(lusca_1.default.xssProtection(true));
 app.use(lusca_1.default.xframe('SAMEORIGIN'));
 app.use(lusca_1.default.nosniff());
+app.disable('x-powered-by');
 /**
  * Primary app routes.
  */

@@ -10,11 +10,15 @@ exports.storeSession = (req, res) => {
     const uuid = req.user;
     const payload = {
         uuid,
-        expires: Date.now() + parseInt(constants_1.JWT_EXPIRATION_MS, 10),
+        expires: Date.now() + parseInt(constants_1.AUTH_EXPIRATION_MS, 10),
     };
     const token = jsonwebtoken_1.default.sign(JSON.stringify(payload), constants_1.JWT_SECRET);
     const secure = constants_1.ENV === 'production';
-    res.cookie(exports.JWT_COOKIE, token, { httpOnly: true, secure, });
+    res.cookie(exports.JWT_COOKIE, token, {
+        httpOnly: true,
+        secure,
+        expires: new Date(Date.now() + constants_1.AUTH_EXPIRATION_MS),
+    });
     // Check for any redirection path set when logging in
     try {
         const { state } = req.query;

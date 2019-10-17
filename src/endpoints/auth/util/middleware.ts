@@ -1,7 +1,7 @@
 import { Response, Request } from 'express'
 import jwt from 'jsonwebtoken';
 
-import { JWT_SECRET, JWT_EXPIRATION_MS, ENV } from '../../../constants';
+import { JWT_SECRET, ENV, AUTH_EXPIRATION_MS } from '../../../constants';
 import { JWT_PAYLOAD } from '../../../middleware/auth';
 
 export const JWT_COOKIE = 'jwt';
@@ -10,12 +10,20 @@ export const storeSession = (req: Request, res: Response) => {
   const uuid: any = req.user;
   const payload: JWT_PAYLOAD = {
     uuid,
-    expires: Date.now() + parseInt(JWT_EXPIRATION_MS, 10),
+    expires: Date.now() + parseInt(AUTH_EXPIRATION_MS, 10),
   };
 
   const token = jwt.sign(JSON.stringify(payload), JWT_SECRET);
   const secure = ENV === 'production';
-  res.cookie(JWT_COOKIE, token, { httpOnly: true, secure, });
+  res.cookie(
+    JWT_COOKIE,
+    token,
+    {
+      httpOnly: true,
+      secure,
+      expires: new Date(Date.now() + AUTH_EXPIRATION_MS),
+    }
+  );
 
   // Check for any redirection path set when logging in
   try {

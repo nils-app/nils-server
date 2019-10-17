@@ -9,4 +9,5 @@ export const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 export const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
 
 export const JWT_SECRET = process.env.JWT_SECRET || Math.random().toString(36).substring(10);
-export const JWT_EXPIRATION_MS: any = process.env.JWT_EXPIRATION_MS || 24 * 60 * 60 * 1000;
+export const AUTH_EXPIRATION_MS: any = process.env.AUTH_EXPIRATION_MS || 7 * 24 * 60 * 60 * 1000;
+export const CSRF_EXPIRATION_MS: any = process.env.CSRF_EXPIRATION_MS || 24 * 60 * 60 * 1000;

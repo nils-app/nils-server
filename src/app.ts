@@ -4,6 +4,7 @@ import bodyParser from 'body-parser'
 import lusca from 'lusca'
 import passport from 'passport'
 import cookieParser from 'cookie-parser'
+import cors from 'cors'
 
 import auth from './endpoints/auth'
 import status from './endpoints/status'
@@ -21,6 +22,12 @@ app.set('env', ENV)
 
 app.use(compression())
 
+const corsOptions: cors.CorsOptions = {
+  origin: true,
+  credentials: true,
+}
+app.use(cors(corsOptions))
+
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
@@ -31,7 +38,8 @@ app.use(cookieParser())
 // Security settings
 app.use(lusca.xssProtection(true))
 app.use(lusca.xframe('SAMEORIGIN'))
-app.use(lusca.nosniff());
+app.use(lusca.nosniff())
+app.disable('x-powered-by')
 
 /**
  * Primary app routes.

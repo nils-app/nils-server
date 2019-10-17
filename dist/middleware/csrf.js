@@ -5,31 +5,42 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const constants_1 = require("../constants");
-const CSRF_HEADER = 'X-CSRF-Token';
+exports.CSRF_HEADER = 'X-CSRF-Token';
 const CSRF_METHODS = ['POST', 'PUT', 'PATCH', 'DELETE'];
+exports.generateCSRFToken = (uuid) => {
+    const payload = {
+        uuid,
+        type: 'csrf',
+        expires: Date.now() + parseInt(constants_1.CSRF_EXPIRATION_MS, 10),
+    };
+    return jsonwebtoken_1.default.sign(JSON.stringify(payload), constants_1.JWT_SECRET);
+};
 exports.checkCSRF = (req, res, next) => {
-    const csrfToken = req.header(CSRF_HEADER);
+    const csrfToken = req.header(exports.CSRF_HEADER);
     const user = req.user;
     if (CSRF_METHODS.indexOf(req.method) < 0) {
         next();
         return;
     }
     if (!csrfToken || !user) {
-        res.status(401).send({
+        return res.status(401).send({
             error: 'Invalid CSRF Token (E.1)'
         });
-        return;
     }
     // Verify the token
     try {
         const verified = jsonwebtoken_1.default.verify(csrfToken, constants_1.JWT_SECRET);
+        if (verified.uuid != user.uuid || verified.expires > Date.now()) {
+            return res.status(401).send({
+                error: 'Invalid or expired CSRF Token (E.3)'
+            });
+        }
         next();
     }
     catch (e) {
-        res.status(401).send({
+        return res.status(401).send({
             error: 'Invalid CSRF Token (E.2)'
         });
-        return;
     }
 };
 //# sourceMappingURL=csrf.js.map

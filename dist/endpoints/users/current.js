@@ -8,19 +8,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const constants_1 = require("../../constants");
+const csrf_1 = require("../../middleware/csrf");
 exports.default = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const user = req.user;
-    const csrf = jsonwebtoken_1.default.sign(JSON.stringify({ uuid: user.uuid, type: 'csrf' }), constants_1.JWT_SECRET);
+    const csrf = csrf_1.generateCSRFToken(user.uuid);
     const payload = {
         user,
         csrf,
     };
-    res.json(payload);
+    res.header(csrf_1.CSRF_HEADER, csrf).json(payload);
 });
 //# sourceMappingURL=current.js.map

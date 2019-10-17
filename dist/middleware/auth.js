@@ -34,7 +34,7 @@ passport.use(exports.JWT_MIDDLEWARE, new passport_jwt_1.Strategy(opts, (jwtPaylo
     try {
         const data = yield db_1.default.query('SELECT uuid, balance, created_on FROM users WHERE uuid = $1', [uuid]);
         if (data.rows.length < 1) {
-            done(null, false);
+            done(null, 'Please login again');
             return;
         }
         const user = data.rows[0];

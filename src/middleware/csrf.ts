@@ -1,9 +1,24 @@
 import { Response, Request, NextFunction } from 'express'
 import jwt from 'jsonwebtoken';
-import { JWT_SECRET } from '../constants';
+import { JWT_SECRET, CSRF_EXPIRATION_MS } from '../constants';
 
-const CSRF_HEADER = 'X-CSRF-Token';
+export const CSRF_HEADER = 'X-CSRF-Token';
 const CSRF_METHODS = ['POST', 'PUT', 'PATCH', 'DELETE'];
+
+type CSRFPayload = {
+  uuid: string,
+  type: 'csrf',
+  expires: number,
+};
+
+export const generateCSRFToken = (uuid: string): string => {
+  const payload: CSRFPayload = {
+    uuid,
+    type: 'csrf',
+    expires: Date.now() + parseInt(CSRF_EXPIRATION_MS, 10),
+  };
+  return jwt.sign(JSON.stringify(payload), JWT_SECRET);
+};
 
 export const checkCSRF = (req: Request, res: Response, next: NextFunction) => {
   const csrfToken = req.header(CSRF_HEADER);
@@ -14,20 +29,23 @@ export const checkCSRF = (req: Request, res: Response, next: NextFunction) => {
   }
 
   if (!csrfToken || !user) {
-    res.status(401).send({
+    return res.status(401).send({
       error: 'Invalid CSRF Token (E.1)'
     });
-    return;
   }
 
   // Verify the token
   try {
-    const verified = jwt.verify(csrfToken, JWT_SECRET);
+    const verified: any = jwt.verify(csrfToken, JWT_SECRET);
+    if (verified.uuid != user.uuid || verified.expires > Date.now()) {
+      return res.status(401).send({
+        error: 'Invalid or expired CSRF Token (E.3)'
+      });
+    }
     next();
   } catch (e) {
-    res.status(401).send({
+    return res.status(401).send({
       error: 'Invalid CSRF Token (E.2)'
     });
-    return;
   }  
 };

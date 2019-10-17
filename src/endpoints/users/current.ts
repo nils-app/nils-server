@@ -1,14 +1,13 @@
 import { Response, Request, NextFunction } from 'express'
-import jwt from 'jsonwebtoken';
 
-import { JWT_SECRET } from '../../constants';
+import { CSRF_HEADER, generateCSRFToken } from '../../middleware/csrf';
 
 export default async (req: Request, res: Response, next: NextFunction) => {
   const user: any = req.user;
-  const csrf = jwt.sign(JSON.stringify({ uuid: user.uuid, type: 'csrf'  }), JWT_SECRET);
+  const csrf = generateCSRFToken(user.uuid);
   const payload = {
     user,
     csrf,
   };
-  res.json(payload);
+  res.header(CSRF_HEADER, csrf).json(payload);
 }
