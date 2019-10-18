@@ -29,9 +29,8 @@ export default [
       const domainId = data.rows[0].uuid;
 
       // insert payment
-      const user: any = req.user;
       const params = [
-        user.uuid,
+        req.user.uuid,
         domainId,
         payload.amount_nils,
       ];

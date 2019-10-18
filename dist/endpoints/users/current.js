@@ -11,10 +11,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const csrf_1 = require("../../middleware/csrf");
 exports.default = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const user = req.user;
-    const csrf = csrf_1.generateCSRFToken(user.uuid);
+    const csrf = csrf_1.generateCSRFToken(req.user.uuid);
     const payload = {
-        user,
+        user: req.user,
         csrf,
     };
     res.header(csrf_1.CSRF_HEADER, csrf).json(payload);

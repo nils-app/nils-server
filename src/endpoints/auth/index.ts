@@ -10,10 +10,10 @@ export default router
 router.use('/google', google)
 router.use('/github', github)
 
-passport.serializeUser((user: any, done) => {
-  done(null, user);
+passport.serializeUser((userId: string, done) => {
+  done(null, userId);
 });
 
-passport.deserializeUser((id, done) => {
-  done(null, id);
+passport.deserializeUser((userId: string, done) => {
+  done(null, userId);
 });

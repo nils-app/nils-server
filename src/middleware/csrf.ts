@@ -22,13 +22,12 @@ export const generateCSRFToken = (uuid: string): string => {
 
 export const checkCSRF = (req: Request, res: Response, next: NextFunction) => {
   const csrfToken = req.header(CSRF_HEADER);
-  const user: any = req.user;
   if (CSRF_METHODS.indexOf(req.method) < 0) {
     next();
     return;
   }
 
-  if (!csrfToken || !user) {
+  if (!csrfToken || !req.user) {
     return res.status(401).send({
       error: 'Invalid CSRF Token (E.1)'
     });
@@ -37,7 +36,7 @@ export const checkCSRF = (req: Request, res: Response, next: NextFunction) => {
   // Verify the token
   try {
     const verified: any = jwt.verify(csrfToken, JWT_SECRET);
-    if (verified.uuid != user.uuid || verified.expires > Date.now()) {
+    if (verified.uuid != req.user.uuid || verified.expires > Date.now()) {
       return res.status(401).send({
         error: 'Invalid or expired CSRF Token (E.3)'
       });

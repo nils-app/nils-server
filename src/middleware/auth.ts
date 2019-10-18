@@ -6,6 +6,12 @@ import db from '../db'
 import { JWT_SECRET } from "../constants";
 import { JWT_COOKIE } from "../endpoints/auth/util/middleware";
 
+export type User = {
+  uuid: string,
+  balance: number,
+  created_on: Date,
+};
+
 export type JWT_PAYLOAD = {
   expires: number,
   uuid: string,
@@ -37,7 +43,7 @@ passport.use(
         return;
       }
 
-      const user = data.rows[0];
+      const user: User = data.rows[0];
       done(null, user);
     } catch (err) {
       done(err);

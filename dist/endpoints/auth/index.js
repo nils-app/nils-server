@@ -11,10 +11,10 @@ exports.router = express_1.default.Router();
 exports.default = exports.router;
 exports.router.use('/google', google_1.default);
 exports.router.use('/github', github_1.default);
-passport_1.default.serializeUser((user, done) => {
-    done(null, user);
+passport_1.default.serializeUser((userId, done) => {
+    done(null, userId);
 });
-passport_1.default.deserializeUser((id, done) => {
-    done(null, id);
+passport_1.default.deserializeUser((userId, done) => {
+    done(null, userId);
 });
 //# sourceMappingURL=index.js.map
