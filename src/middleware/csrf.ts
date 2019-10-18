@@ -1,6 +1,8 @@
 import { Response, Request, NextFunction } from 'express'
 import jwt from 'jsonwebtoken';
+
 import { JWT_SECRET, CSRF_EXPIRATION_MS } from '../constants';
+import errors from '../endpoints/auth/lib/error';
 
 export const CSRF_HEADER = 'X-CSRF-Token';
 const CSRF_METHODS = ['POST', 'PUT', 'PATCH', 'DELETE'];
@@ -28,23 +30,17 @@ export const checkCSRF = (req: Request, res: Response, next: NextFunction) => {
   }
 
   if (!csrfToken || !req.user) {
-    return res.status(401).send({
-      error: 'Invalid CSRF Token (E.1)'
-    });
+    return errors(res)(401, 'Invalid CSRF Token (E.1)');
   }
 
   // Verify the token
   try {
     const verified: any = jwt.verify(csrfToken, JWT_SECRET);
     if (verified.uuid != req.user.uuid || verified.expires > Date.now()) {
-      return res.status(401).send({
-        error: 'Invalid or expired CSRF Token (E.3)'
-      });
+      return errors(res)(401, 'Invalid CSRF Token (E.2)');
     }
     next();
   } catch (e) {
-    return res.status(401).send({
-      error: 'Invalid CSRF Token (E.2)'
-    });
+    return errors(res)(401, 'Invalid CSRF Token (E.3)');
   }  
 };

@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_validator_1 = require("express-validator");
 const db_1 = __importDefault(require("../../db"));
+const error_1 = __importDefault(require("../../endpoints/auth/lib/error"));
 exports.validate = [
     express_validator_1.check('amount_nils').isFloat({ min: 0 }),
     express_validator_1.check('domain').isLength({ min: 1 }),
@@ -21,9 +22,9 @@ exports.validate = [
 exports.default = [
     exports.validate,
     (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        const errors = express_validator_1.validationResult(req);
-        if (!errors.isEmpty()) {
-            return res.status(422).json({ errors: errors.array() });
+        const errorList = express_validator_1.validationResult(req);
+        if (!errorList.isEmpty()) {
+            return error_1.default(res)(422, ...errorList.array());
         }
         const payload = req.body;
         try {
@@ -31,7 +32,7 @@ exports.default = [
             let data = yield db_1.default.query('SELECT uuid FROM domains WHERE domain = $1', [payload.domain]);
             if (data.rows.length < 1) {
                 // domain doesnt exist
-                return res.status(404).json({ errors: [`Domain "${payload.domain}" is not registered with Nils`] });
+                return error_1.default(res)(404, `Domain "${payload.domain}" is not registered with Nils`);
             }
             const domainId = data.rows[0].uuid;
             // insert payment
@@ -42,13 +43,13 @@ exports.default = [
             ];
             data = yield db_1.default.query('INSERT INTO transactions(user_id, domain_id, amount_nils) VALUES($1, $2, $3) RETURNING *', params);
             if (data.rows.length < 1) {
-                return res.status(500).json({ errors: [`Unable to send payment to "${payload.domain}"`] });
+                return error_1.default(res)(500, `Unable to send payment to "${payload.domain}"`);
             }
             return res.json(data.rows[0]);
         }
         catch (e) {
             console.error(e);
-            return res.status(500).json({ errors: ['Unable to send payment'] });
+            return error_1.default(res)(500, 'Unable to send payment');
         }
     })
 ];
