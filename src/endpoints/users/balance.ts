@@ -13,7 +13,7 @@ export default async (req: Request, res: Response) => {
     domains: [],
   };
 
-  data = await db.query('SELECT uuid, domain, balance FROM domains WHERE user_id = $1', [req.user.uuid]);
+  data = await db.query('SELECT uuid, domain, balance, created_on FROM domains WHERE user_id = $1', [req.user.uuid]);
   balances.domains = data.rows;
 
   res.json(balances)

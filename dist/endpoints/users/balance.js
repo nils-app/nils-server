@@ -23,7 +23,7 @@ exports.default = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         personal: data.rows[0].balance,
         domains: [],
     };
-    data = yield db_1.default.query('SELECT uuid, domain, balance FROM domains WHERE user_id = $1', [req.user.uuid]);
+    data = yield db_1.default.query('SELECT uuid, domain, balance, created_on FROM domains WHERE user_id = $1', [req.user.uuid]);
     balances.domains = data.rows;
     res.json(balances);
 });
