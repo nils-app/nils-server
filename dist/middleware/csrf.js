@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const constants_1 = require("../constants");
 const error_1 = __importDefault(require("../endpoints/auth/lib/error"));
-exports.CSRF_HEADER = 'X-CSRF-Token';
+exports.CSRF_HEADER = 'x-csrf-token';
 const CSRF_METHODS = ['POST', 'PUT', 'PATCH', 'DELETE'];
 exports.generateCSRFToken = (uuid) => {
     const payload = {
@@ -28,7 +28,8 @@ exports.checkCSRF = (req, res, next) => {
     // Verify the token
     try {
         const verified = jsonwebtoken_1.default.verify(csrfToken, constants_1.JWT_SECRET);
-        if (verified.uuid != req.user.uuid || verified.expires > Date.now()) {
+        // Only valid if user ids match, or expiration date is in the future
+        if (verified.uuid != req.user.uuid || verified.expires < Date.now()) {
             return error_1.default(res)(401, 'Invalid CSRF Token (E.2)');
         }
         next();

@@ -9,7 +9,8 @@ import cors from 'cors'
 import auth from './endpoints/auth'
 import status from './endpoints/status'
 import users from './endpoints/users'
-import { checkCSRF } from './middleware/csrf'
+import domains from './endpoints/domains'
+import { checkCSRF, CSRF_HEADER } from './middleware/csrf'
 import { PORT, ENV } from './constants'
 import { checkSession } from './middleware/auth'
 
@@ -25,6 +26,7 @@ app.use(compression())
 const corsOptions: cors.CorsOptions = {
   origin: true,
   credentials: true,
+  exposedHeaders: [CSRF_HEADER],
 }
 app.use(cors(corsOptions))
 
@@ -45,6 +47,7 @@ app.disable('x-powered-by')
  * Primary app routes.
  */
 app.use('/users', checkSession, checkCSRF, users)
+app.use('/domains', checkSession, checkCSRF, domains)
 app.use('/auth', auth)
 
 // This endpoint must be the last one

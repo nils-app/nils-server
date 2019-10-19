@@ -13,6 +13,7 @@ const cors_1 = __importDefault(require("cors"));
 const auth_1 = __importDefault(require("./endpoints/auth"));
 const status_1 = __importDefault(require("./endpoints/status"));
 const users_1 = __importDefault(require("./endpoints/users"));
+const domains_1 = __importDefault(require("./endpoints/domains"));
 const csrf_1 = require("./middleware/csrf");
 const constants_1 = require("./constants");
 const auth_2 = require("./middleware/auth");
@@ -25,6 +26,7 @@ app.use(compression_1.default());
 const corsOptions = {
     origin: true,
     credentials: true,
+    exposedHeaders: [csrf_1.CSRF_HEADER],
 };
 app.use(cors_1.default(corsOptions));
 app.use(body_parser_1.default.json());
@@ -41,6 +43,7 @@ app.disable('x-powered-by');
  * Primary app routes.
  */
 app.use('/users', auth_2.checkSession, csrf_1.checkCSRF, users_1.default);
+app.use('/domains', auth_2.checkSession, csrf_1.checkCSRF, domains_1.default);
 app.use('/auth', auth_1.default);
 // This endpoint must be the last one
 app.get('/', status_1.default(app));

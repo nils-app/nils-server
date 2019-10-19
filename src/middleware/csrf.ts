@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 import { JWT_SECRET, CSRF_EXPIRATION_MS } from '../constants';
 import errors from '../endpoints/auth/lib/error';
 
-export const CSRF_HEADER = 'X-CSRF-Token';
+export const CSRF_HEADER = 'x-csrf-token';
 const CSRF_METHODS = ['POST', 'PUT', 'PATCH', 'DELETE'];
 
 type CSRFPayload = {
@@ -36,7 +36,8 @@ export const checkCSRF = (req: Request, res: Response, next: NextFunction) => {
   // Verify the token
   try {
     const verified: any = jwt.verify(csrfToken, JWT_SECRET);
-    if (verified.uuid != req.user.uuid || verified.expires > Date.now()) {
+    // Only valid if user ids match, or expiration date is in the future
+    if (verified.uuid != req.user.uuid || verified.expires < Date.now()) {
       return errors(res)(401, 'Invalid CSRF Token (E.2)');
     }
     next();
