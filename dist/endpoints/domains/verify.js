@@ -14,8 +14,19 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const axios_1 = __importDefault(require("axios"));
 const dns_1 = __importDefault(require("dns"));
+const db_1 = __importDefault(require("../../db"));
 const token_1 = require("./util/token");
 const error_1 = __importDefault(require("../auth/lib/error"));
+function processVerification(req, res, domain) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const user_id = req.user.uuid;
+        const data = yield db_1.default.query('INSERT INTO domains(user_id, domain) VALUES($1, $2) RETURNING *', [user_id, domain]);
+        if (data.rows.length > 0) {
+            return res.send(data.rows[0]);
+        }
+        return error_1.default(res)(500, 'The domain was verified successfully but we were unable to add it to your account. Please try again later.');
+    });
+}
 exports.default = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const domain = req.params.domain;
     const token = token_1.genToken(domain);
@@ -23,16 +34,16 @@ exports.default = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     // File verification
     verified = yield verifyUrl(`http://${domain}/nils.html`, token);
     if (verified) {
-        return res.status(204).send();
+        return processVerification(req, res, domain);
     }
     verified = yield verifyUrl(`https://${domain}/nils.html`, token);
     if (verified) {
-        return res.status(204).send();
+        return processVerification(req, res, domain);
     }
     // DNS verification
     verified = yield verifyDns(domain, token);
     if (verified) {
-        return res.status(204).send();
+        return processVerification(req, res, domain);
     }
     return error_1.default(res)(404, 'Unable to verify domain');
 });

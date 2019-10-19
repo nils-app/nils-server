@@ -2,8 +2,18 @@ import { Response, Request } from 'express'
 import axios, { AxiosRequestConfig } from 'axios';
 import dns from 'dns';
 
+import db from '../../db';
 import { genToken } from './util/token';
 import errors from '../auth/lib/error';
+
+async function processVerification(req: Request, res: Response, domain: string) {
+  const user_id = req.user.uuid;
+  const data = await db.query('INSERT INTO domains(user_id, domain) VALUES($1, $2) RETURNING *', [user_id, domain]);
+  if (data.rows.length > 0) {
+    return res.send(data.rows[0]);
+  }
+  return errors(res)(500, 'The domain was verified successfully but we were unable to add it to your account. Please try again later.');
+}
 
 export default async (req: Request, res: Response) => {
   const domain: string = req.params.domain;
@@ -14,18 +24,19 @@ export default async (req: Request, res: Response) => {
   // File verification
   verified = await verifyUrl(`http://${domain}/nils.html`, token);
   if (verified) {
-    return res.status(204).send();
+    return processVerification(req, res, domain);
   }
 
   verified = await verifyUrl(`https://${domain}/nils.html`, token);
   if (verified) {
-    return res.status(204).send();
+    return processVerification(req, res, domain);
   }
 
   // DNS verification
   verified = await verifyDns(domain, token);
+
   if (verified) {
-    return res.status(204).send();
+    return processVerification(req, res, domain);
   }
 
   return errors(res)(404, 'Unable to verify domain');
