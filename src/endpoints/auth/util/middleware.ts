@@ -22,6 +22,7 @@ export const storeSession = (req: Request, res: Response) => {
       httpOnly: true,
       secure,
       expires: new Date(Date.now() + AUTH_EXPIRATION_MS),
+      sameSite: 'None',
     }
   );
 

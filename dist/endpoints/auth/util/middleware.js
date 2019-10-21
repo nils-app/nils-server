@@ -18,6 +18,7 @@ exports.storeSession = (req, res) => {
         httpOnly: true,
         secure,
         expires: new Date(Date.now() + constants_1.AUTH_EXPIRATION_MS),
+        sameSite: 'None',
     });
     // Check for any redirection path set when logging in
     try {
