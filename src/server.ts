@@ -1,4 +1,5 @@
 import app from './app';
+import { getTransferWiseProfile } from './lib/transferwise';
 
 /**
  * Start Express server.
@@ -10,5 +11,8 @@ const server = app.listen(app.get('port'), () => {
     app.get('port'),
   )
 })
+
+// Preload the transferwise profile id
+getTransferWiseProfile();
 
 export default server

@@ -2,7 +2,7 @@ import { Response, Request } from 'express'
 import { check, validationResult } from 'express-validator';
 
 import db from '../../db';
-import errors from '../../endpoints/auth/lib/error';
+import errors from '../../lib/error';
 
 export const validate = [
   check('amount_nils').isFloat({ min: 0 }),

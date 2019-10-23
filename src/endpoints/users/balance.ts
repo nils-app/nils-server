@@ -1,6 +1,6 @@
 import { Response, Request } from 'express'
 
-import errors from '../../endpoints/auth/lib/error';
+import errors from '../../lib/error';
 import db from '../../db';
 
 export default async (req: Request, res: Response) => {

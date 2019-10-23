@@ -10,6 +10,7 @@ import auth from './endpoints/auth'
 import status from './endpoints/status'
 import users from './endpoints/users'
 import domains from './endpoints/domains'
+import payouts from './endpoints/payouts'
 import { checkCSRF, CSRF_HEADER } from './middleware/csrf'
 import { PORT, ENV } from './constants'
 import { checkSession } from './middleware/auth'
@@ -48,6 +49,7 @@ app.disable('x-powered-by')
  */
 app.use('/users', checkSession, checkCSRF, users)
 app.use('/domains', checkSession, checkCSRF, domains)
+app.use('/payouts', checkSession, checkCSRF, payouts)
 app.use('/auth', auth)
 
 // This endpoint must be the last one

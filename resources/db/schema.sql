@@ -1,6 +1,7 @@
 CREATE TABLE users (  
     uuid UUID DEFAULT gen_random_uuid() NOT NULL,
     balance int DEFAULT 0 NOT NULL,
+    transferwise_id int NULL,
     created_on timestamp with time zone DEFAULT now() NOT NULL,
     PRIMARY KEY (uuid)
 );
@@ -45,6 +46,7 @@ CREATE TABLE payouts (
     amount_nils int NOT NULL,
     amount_fiat int NOT NULL,
     currency text NOT NULL,
+    sent_on timestamp with time zone NULL,
     created_on timestamp with time zone DEFAULT now() NOT NULL,
     PRIMARY KEY (uuid),
     FOREIGN KEY (user_id) REFERENCES users (uuid) ON DELETE RESTRICT

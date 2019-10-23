@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const constants_1 = require("../constants");
-const error_1 = __importDefault(require("../endpoints/auth/lib/error"));
+const error_1 = __importDefault(require("../lib/error"));
 exports.CSRF_HEADER = 'x-csrf-token';
 const CSRF_METHODS = ['POST', 'PUT', 'PATCH', 'DELETE'];
 exports.generateCSRFToken = (uuid) => {

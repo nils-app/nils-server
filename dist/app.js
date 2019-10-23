@@ -14,6 +14,7 @@ const auth_1 = __importDefault(require("./endpoints/auth"));
 const status_1 = __importDefault(require("./endpoints/status"));
 const users_1 = __importDefault(require("./endpoints/users"));
 const domains_1 = __importDefault(require("./endpoints/domains"));
+const payouts_1 = __importDefault(require("./endpoints/payouts"));
 const csrf_1 = require("./middleware/csrf");
 const constants_1 = require("./constants");
 const auth_2 = require("./middleware/auth");
@@ -44,6 +45,7 @@ app.disable('x-powered-by');
  */
 app.use('/users', auth_2.checkSession, csrf_1.checkCSRF, users_1.default);
 app.use('/domains', auth_2.checkSession, csrf_1.checkCSRF, domains_1.default);
+app.use('/payouts', auth_2.checkSession, csrf_1.checkCSRF, payouts_1.default);
 app.use('/auth', auth_1.default);
 // This endpoint must be the last one
 app.get('/', status_1.default(app));

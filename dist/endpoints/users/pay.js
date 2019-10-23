@@ -14,7 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_validator_1 = require("express-validator");
 const db_1 = __importDefault(require("../../db"));
-const error_1 = __importDefault(require("../../endpoints/auth/lib/error"));
+const error_1 = __importDefault(require("../../lib/error"));
 exports.validate = [
     express_validator_1.check('amount_nils').isFloat({ min: 0 }),
     express_validator_1.check('domain').isLength({ min: 1 }),

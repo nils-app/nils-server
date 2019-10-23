@@ -4,7 +4,7 @@ import dns from 'dns';
 
 import db from '../../db';
 import { genToken } from './util/token';
-import errors from '../auth/lib/error';
+import errors from '../../lib/error';
 
 async function processVerification(req: Request, res: Response, domain: string) {
   const user_id = req.user.uuid;

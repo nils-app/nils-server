@@ -2,7 +2,7 @@ import { Response, Request, NextFunction } from 'express'
 import jwt from 'jsonwebtoken';
 
 import { JWT_SECRET, CSRF_EXPIRATION_MS } from '../constants';
-import errors from '../endpoints/auth/lib/error';
+import errors from '../lib/error';
 
 export const CSRF_HEADER = 'x-csrf-token';
 const CSRF_METHODS = ['POST', 'PUT', 'PATCH', 'DELETE'];

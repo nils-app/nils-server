@@ -12,3 +12,6 @@ export const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
 export const JWT_SECRET = process.env.JWT_SECRET || Math.random().toString(36).substring(10);
 export const AUTH_EXPIRATION_MS: any = process.env.AUTH_EXPIRATION_MS || 7 * 24 * 60 * 60 * 1000;
 export const CSRF_EXPIRATION_MS: any = process.env.CSRF_EXPIRATION_MS || 24 * 60 * 60 * 1000;
+
+export const TRANSFERWISE_API_KEY = process.env.TRANSFERWISE_API_KEY;
+export const TRANSFERWISE_BASE = process.env.TRANSFERWISE_BASE || 'https://api.transferwise.com';

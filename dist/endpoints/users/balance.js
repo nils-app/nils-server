@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const error_1 = __importDefault(require("../../endpoints/auth/lib/error"));
+const error_1 = __importDefault(require("../../lib/error"));
 const db_1 = __importDefault(require("../../db"));
 exports.default = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let data = yield db_1.default.query('SELECT balance FROM users WHERE uuid = $1', [req.user.uuid]);

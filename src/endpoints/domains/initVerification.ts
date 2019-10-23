@@ -1,7 +1,7 @@
 import { Response, Request } from 'express'
 
 import db from '../../db';
-import errors from '../auth/lib/error';
+import errors from '../../lib/error';
 import { genToken } from './util/token';
 
 export default async (req: Request, res: Response) => {

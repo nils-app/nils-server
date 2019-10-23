@@ -16,7 +16,7 @@ const axios_1 = __importDefault(require("axios"));
 const dns_1 = __importDefault(require("dns"));
 const db_1 = __importDefault(require("../../db"));
 const token_1 = require("./util/token");
-const error_1 = __importDefault(require("../auth/lib/error"));
+const error_1 = __importDefault(require("../../lib/error"));
 function processVerification(req, res, domain) {
     return __awaiter(this, void 0, void 0, function* () {
         const user_id = req.user.uuid;

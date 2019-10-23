@@ -13,7 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const db_1 = __importDefault(require("../../db"));
-const error_1 = __importDefault(require("../auth/lib/error"));
+const error_1 = __importDefault(require("../../lib/error"));
 const token_1 = require("./util/token");
 exports.default = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const domain = req.params.domain;
