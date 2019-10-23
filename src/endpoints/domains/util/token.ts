@@ -2,4 +2,10 @@ import jwt from 'jsonwebtoken';
 
 import { JWT_SECRET } from "../../../constants";
 
-export const genToken = (domain: string): string => jwt.sign(JSON.stringify(domain), JWT_SECRET);
+export const genToken = (uuid: string, domain: string): string => {
+  const payload = {
+    uuid,
+    domain,
+  };
+  return jwt.sign(JSON.stringify(payload), JWT_SECRET)
+};

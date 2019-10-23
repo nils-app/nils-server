@@ -17,7 +17,7 @@ async function processVerification(req: Request, res: Response, domain: string) 
 
 export default async (req: Request, res: Response) => {
   const domain: string = req.params.domain;
-  const token = genToken(domain);
+  const token = genToken(req.user.uuid, domain);
 
   let verified: boolean = false;
 

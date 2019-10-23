@@ -29,7 +29,7 @@ function processVerification(req, res, domain) {
 }
 exports.default = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const domain = req.params.domain;
-    const token = token_1.genToken(domain);
+    const token = token_1.genToken(req.user.uuid, domain);
     let verified = false;
     // File verification
     verified = yield verifyUrl(`http://${domain}/.well-known/nils`, token);
