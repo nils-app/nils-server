@@ -22,12 +22,12 @@ export default async (req: Request, res: Response) => {
   let verified: boolean = false;
 
   // File verification
-  verified = await verifyUrl(`http://${domain}/nils.html`, token);
+  verified = await verifyUrl(`http://${domain}/.well-known/nils`, token);
   if (verified) {
     return processVerification(req, res, domain);
   }
 
-  verified = await verifyUrl(`https://${domain}/nils.html`, token);
+  verified = await verifyUrl(`https://${domain}/.well-known/nils`, token);
   if (verified) {
     return processVerification(req, res, domain);
   }

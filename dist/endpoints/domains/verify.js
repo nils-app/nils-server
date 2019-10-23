@@ -32,11 +32,11 @@ exports.default = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const token = token_1.genToken(domain);
     let verified = false;
     // File verification
-    verified = yield verifyUrl(`http://${domain}/nils.html`, token);
+    verified = yield verifyUrl(`http://${domain}/.well-known/nils`, token);
     if (verified) {
         return processVerification(req, res, domain);
     }
-    verified = yield verifyUrl(`https://${domain}/nils.html`, token);
+    verified = yield verifyUrl(`https://${domain}/.well-known/nils`, token);
     if (verified) {
         return processVerification(req, res, domain);
     }
