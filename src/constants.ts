@@ -15,3 +15,5 @@ export const CSRF_EXPIRATION_MS: any = process.env.CSRF_EXPIRATION_MS || 24 * 60
 
 export const TRANSFERWISE_API_KEY = process.env.TRANSFERWISE_API_KEY;
 export const TRANSFERWISE_BASE = process.env.TRANSFERWISE_BASE || 'https://api.transferwise.com';
+
+export const NILS_GBP_RATIO: number = process.env.NILS_GBP_RATIO ? parseInt(process.env.NILS_GBP_RATIO, 10) : 0.001;

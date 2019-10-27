@@ -1,0 +1,1 @@
+{"version":3,"file":"list copy.js","sourceRoot":"","sources":["../../../src/endpoints/payouts/list copy.ts"],"names":[],"mappings":";;;;;;;;;;;;;;AAEA,kDAA0B;AAE1B,kBAAe,CAAO,GAAY,EAAE,GAAa,EAAE,EAAE;IACnD,MAAM,IAAI,GAAG,MAAM,YAAE,CAAC,KAAK,CAAC,6FAA6F,EAAE,CAAC,GAAG,CAAC,IAAI,CAAC,IAAI,CAAC,CAAC,CAAC;IAC5I,GAAG,CAAC,IAAI,CAAC,IAAI,CAAC,IAAI,CAAC,CAAA;AACrB,CAAC,CAAA,CAAA"}

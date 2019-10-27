@@ -13,4 +13,5 @@ exports.AUTH_EXPIRATION_MS = process.env.AUTH_EXPIRATION_MS || 7 * 24 * 60 * 60 
 exports.CSRF_EXPIRATION_MS = process.env.CSRF_EXPIRATION_MS || 24 * 60 * 60 * 1000;
 exports.TRANSFERWISE_API_KEY = process.env.TRANSFERWISE_API_KEY;
 exports.TRANSFERWISE_BASE = process.env.TRANSFERWISE_BASE || 'https://api.transferwise.com';
+exports.NILS_GBP_RATIO = process.env.NILS_GBP_RATIO ? parseInt(process.env.NILS_GBP_RATIO, 10) : 0.001;
 //# sourceMappingURL=constants.js.map

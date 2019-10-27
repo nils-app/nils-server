@@ -39,7 +39,7 @@ exports.default = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const data = yield transferwise_1.transferwiseRequest('/v1/accounts', 'POST', payload);
         const recipientId = data.id;
-        db_1.default.query('UPDATE users SET transferwise_id = $1, currency = $2 WHERE uuid = $3', [recipientId, req.body.currency, req.user.uuid]);
+        db_1.default.query('UPDATE users SET transferwise_id = $1 WHERE uuid = $2', [recipientId, req.user.uuid]);
         res.json({
             recipient: recipientId,
         });
@@ -53,4 +53,4 @@ exports.default = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 });
 const getTransferWiseProfile = () => __awaiter(void 0, void 0, void 0, function* () {
 });
-//# sourceMappingURL=addRecipient.js.map
+//# sourceMappingURL=addRecipient copy.js.map
