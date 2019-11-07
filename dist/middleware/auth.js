@@ -32,7 +32,7 @@ passport.use(exports.JWT_MIDDLEWARE, new passport_jwt_1.Strategy(opts, (jwtPaylo
         return done('Invalid user, please login again');
     }
     try {
-        const data = yield db_1.default.query('SELECT uuid, balance, transferwise_id, created_on FROM users WHERE uuid = $1', [uuid]);
+        const data = yield db_1.default.query('SELECT uuid, balance, transferwise_id, currency, created_on FROM users WHERE uuid = $1', [uuid]);
         if (data.rows.length < 1) {
             done(null, 'Please login again');
             return;

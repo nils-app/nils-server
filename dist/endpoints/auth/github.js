@@ -16,11 +16,11 @@ const express_1 = __importDefault(require("express"));
 const passport_1 = __importDefault(require("passport"));
 const passport_github2_1 = require("passport-github2");
 const auth_1 = require("./util/auth");
-const middleware_1 = require("./util/middleware");
 const constants_1 = require("../../constants");
 exports.router = express_1.default.Router();
 exports.default = exports.router;
 exports.PROVIDER = 'github';
+exports.SCOPE = ['user:email'];
 if (constants_1.GITHUB_CLIENT_ID) {
     passport_1.default.use(new passport_github2_1.Strategy({
         clientID: constants_1.GITHUB_CLIENT_ID,
@@ -35,13 +35,6 @@ if (constants_1.GITHUB_CLIENT_ID) {
         const user_id = yield auth_1.authWithProvider(exports.PROVIDER, profile.id, email);
         return done(null, user_id);
     })));
-    exports.router.get('/', (req, res, next) => {
-        const { returnTo } = req.query;
-        const state = returnTo
-            ? Buffer.from(JSON.stringify({ returnTo })).toString('base64')
-            : undefined;
-        passport_1.default.authenticate(exports.PROVIDER, { scope: ['user:email'], state })(req, res, next);
-    });
-    exports.router.get("/callback", passport_1.default.authenticate(exports.PROVIDER, { failureRedirect: "/" }), middleware_1.storeSession);
+    auth_1.setupRoutes(exports.router, exports.PROVIDER, exports.SCOPE);
 }
 //# sourceMappingURL=github.js.map

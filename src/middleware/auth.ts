@@ -37,7 +37,7 @@ passport.use(
     }
 
     try {
-      const data = await db.query('SELECT uuid, balance, transferwise_id, created_on FROM users WHERE uuid = $1', [uuid]);
+      const data = await db.query('SELECT uuid, balance, transferwise_id, currency, created_on FROM users WHERE uuid = $1', [uuid]);
 
       if (data.rows.length < 1) {
         done(null, 'Please login again');

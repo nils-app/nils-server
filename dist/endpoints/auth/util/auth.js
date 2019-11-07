@@ -12,7 +12,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const passport_1 = __importDefault(require("passport"));
 const db_1 = __importDefault(require("../../../db"));
+const middleware_1 = require("./middleware");
 /**
  * Check if a user exists in our db with a provider and an email
  * and creates the user if not
@@ -74,4 +76,35 @@ exports.authWithProvider = (provider, token, email) => __awaiter(void 0, void 0,
         throw new Error('Unable to login user');
     }
 });
+exports.demoAuth = () => __awaiter(void 0, void 0, void 0, function* () {
+    const demoProvider = 'demo';
+    const demoToken = 'demo';
+    const params = [demoProvider, demoToken];
+    let data = yield db_1.default.query('SELECT user_id FROM user_logins WHERE auth_provider = $1 AND token = $2', params);
+    if (data.rows.length > 0) {
+        console.log('found demo user in logins table', data.rows);
+        return data.rows[0].user_id;
+    }
+    // Create demo user
+    data = yield db_1.default.query('INSERT INTO users(balance) VALUES(0) RETURNING *');
+    const user_id = data.rows[0].uuid;
+    const createParams = [
+        user_id,
+        demoProvider,
+        demoToken,
+    ];
+    yield db_1.default.query('INSERT INTO user_logins(user_id, auth_provider, token) VALUES ($1, $2, $3)', createParams);
+    console.log('Created new demo user', user_id);
+    return user_id;
+});
+exports.setupRoutes = (router, provider, scope) => {
+    router.get('/', (req, res, next) => {
+        const { returnTo } = req.query;
+        const state = returnTo
+            ? Buffer.from(JSON.stringify({ returnTo })).toString('base64')
+            : undefined;
+        passport_1.default.authenticate(provider, { scope, state })(req, res, next);
+    });
+    router.get("/callback", passport_1.default.authenticate(provider, { failureRedirect: "/" }), middleware_1.storeSession);
+};
 //# sourceMappingURL=auth.js.map

@@ -16,11 +16,11 @@ const express_1 = __importDefault(require("express"));
 const passport_1 = __importDefault(require("passport"));
 const passport_google_oauth_1 = require("passport-google-oauth");
 const auth_1 = require("./util/auth");
-const middleware_1 = require("./util/middleware");
 const constants_1 = require("../../constants");
 exports.router = express_1.default.Router();
 exports.default = exports.router;
 const PROVIDER = 'google';
+const SCOPE = ["https://www.googleapis.com/auth/userinfo.email"];
 if (constants_1.GOOGLE_CLIENT_ID) {
     passport_1.default.use(new passport_google_oauth_1.OAuth2Strategy({
         clientID: constants_1.GOOGLE_CLIENT_ID,
@@ -36,10 +36,6 @@ if (constants_1.GOOGLE_CLIENT_ID) {
         const user_id = yield auth_1.authWithProvider(PROVIDER, profile.id, verifiedEmails[0]);
         return done(null, user_id);
     })));
-    exports.router.get("/", passport_1.default.authenticate(PROVIDER, {
-        scope: ["https://www.googleapis.com/auth/userinfo.email"]
-    }));
-    // TODO Update redirect URL
-    exports.router.get("/callback", passport_1.default.authenticate(PROVIDER, { failureRedirect: "/login" }), middleware_1.storeSession);
+    auth_1.setupRoutes(exports.router, PROVIDER, SCOPE);
 }
 //# sourceMappingURL=google.js.map

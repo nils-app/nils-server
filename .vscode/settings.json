@@ -8,6 +8,15 @@
             "port": 5432,
             "server": "manny.db.elephantsql.com",
             "username": "cuwdfwxn"
-        }
+        },
+        {
+          "database": "nils",
+          "dialect": "PostgreSQL",
+          "name": "Nil - Local",
+          "password": "",
+          "port": 5432,
+          "server": "localhost",
+          "username": "alex"
+      }
     ]
 }

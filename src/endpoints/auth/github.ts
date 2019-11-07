@@ -3,14 +3,14 @@ import passport from "passport";
 
 import { Strategy as GitHubStrategy } from "passport-github2";
 
-import { authWithProvider } from './util/auth';
-import { storeSession } from './util/middleware';
+import { authWithProvider, setupRoutes } from './util/auth';
 import { GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET, DOMAIN } from '../../constants';
 
 export const router = express.Router();
 export default router;
 
 export const PROVIDER = 'github';
+export const SCOPE = [ 'user:email' ];
 
 if (GITHUB_CLIENT_ID) {
   passport.use(
@@ -33,19 +33,5 @@ if (GITHUB_CLIENT_ID) {
     )
   );
 
-  router.get('/', (req, res, next) => {
-    const { returnTo } = req.query
-    const state = returnTo
-      ? Buffer.from(JSON.stringify({ returnTo })).toString('base64')
-      : undefined
-
-    passport.authenticate(PROVIDER, { scope: [ 'user:email' ], state })(req, res, next)
-  })
-  
-  router.get(
-    "/callback",
-    passport.authenticate(PROVIDER, { failureRedirect: "/" }),
-    storeSession,
-  );
-  
+  setupRoutes(router, PROVIDER, SCOPE);
 }

@@ -12,9 +12,19 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const db_1 = __importDefault(require("../../db"));
+const error_1 = __importDefault(require("../../lib/error"));
+const transferwise_1 = require("../../lib/transferwise");
 exports.default = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const data = yield db_1.default.query('SELECT uuid, tx_id, amount_nils, amount_fiat, currency, created_on, sent_on, estimated_on FROM payouts WHERE user_id = $1', [req.user.uuid]);
-    res.json(data.rows);
+    const txId = req.params.tx_id;
+    try {
+        const data = yield transferwise_1.transferwiseRequest(`/v1/transfers/${txId}`, 'GET');
+        res.json(data);
+    }
+    catch (e) {
+        if (e.response && e.response.data) {
+            console.log(e.response.data);
+        }
+        return error_1.default(res)(400, e.message);
+    }
 });
-//# sourceMappingURL=list.js.map
+//# sourceMappingURL=query copy.js.map

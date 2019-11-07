@@ -8,10 +8,12 @@ const list_1 = __importDefault(require("./list"));
 const addRecipient_1 = __importDefault(require("./addRecipient"));
 const send_1 = __importDefault(require("./send"));
 const query_1 = __importDefault(require("./query"));
+const info_1 = __importDefault(require("./info"));
 exports.router = express_promise_router_1.default();
 exports.default = exports.router;
 exports.router.get('/', list_1.default);
-exports.router.get('/:tx_id', query_1.default);
+exports.router.get('/info', info_1.default);
 exports.router.put('/', addRecipient_1.default);
 exports.router.post('/', send_1.default);
+exports.router.get('/:tx_id', query_1.default);
 //# sourceMappingURL=index.js.map

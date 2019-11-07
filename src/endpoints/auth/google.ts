@@ -3,14 +3,14 @@ import passport from "passport";
 
 import { OAuth2Strategy } from "passport-google-oauth";
 
-import { authWithProvider } from './util/auth';
-import { storeSession } from './util/middleware';
+import { authWithProvider, setupRoutes } from './util/auth';
 import { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, DOMAIN } from '../../constants';
 
 export const router = express.Router();
 export default router;
 
 const PROVIDER = 'google';
+const SCOPE = ["https://www.googleapis.com/auth/userinfo.email"];
 
 if (GOOGLE_CLIENT_ID) {
   passport.use(
@@ -35,18 +35,6 @@ if (GOOGLE_CLIENT_ID) {
       }
     )
   );
-  
-  router.get(
-    "/",
-    passport.authenticate(PROVIDER, {
-      scope: ["https://www.googleapis.com/auth/userinfo.email"]
-    })
-  );
-  
-  // TODO Update redirect URL
-  router.get(
-    "/callback",
-    passport.authenticate(PROVIDER, { failureRedirect: "/login" }),
-    storeSession,
-  );  
+
+  setupRoutes(router, PROVIDER, SCOPE);
 }
