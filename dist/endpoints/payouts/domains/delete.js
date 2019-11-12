@@ -12,19 +12,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const error_1 = __importDefault(require("../../lib/error"));
-const db_1 = __importDefault(require("../../db"));
+const db_1 = __importDefault(require("../../../db"));
+const error_1 = __importDefault(require("../../../lib/error"));
 exports.default = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    let data = yield db_1.default.query('SELECT balance FROM users WHERE uuid = $1', [req.user.uuid]);
+    const domain = req.params.uuid;
+    const data = yield db_1.default.query('DELETE FROM domains WHERE user_id = $1 AND uuid = $2 RETURNING uuid', [req.user.uuid, domain]);
     if (data.rows.length < 1) {
-        return error_1.default(res)(404, 'Balance not found!');
+        return error_1.default(res)(400, 'Domain not deleted, please try again later');
     }
-    const balances = {
-        personal: data.rows[0].balance,
-        domains: [],
-    };
-    data = yield db_1.default.query('SELECT uuid, domain, balance, created_on FROM domains WHERE user_id = $1', [req.user.uuid]);
-    balances.domains = data.rows;
-    res.json(balances);
+    return res.status(204).send();
 });
-//# sourceMappingURL=balance copy.js.map
+//# sourceMappingURL=delete.js.map

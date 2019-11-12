@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 
-import { JWT_SECRET } from "../../../constants";
+import { JWT_SECRET } from "../../../../constants";
 
 export const genToken = (uuid: string, domain: string): string => {
   const payload = {

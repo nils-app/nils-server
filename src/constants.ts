@@ -16,5 +16,6 @@ export const CSRF_EXPIRATION_MS: any = process.env.CSRF_EXPIRATION_MS || 24 * 60
 export const TRANSFERWISE_API_KEY = process.env.TRANSFERWISE_API_KEY;
 export const TRANSFERWISE_BASE = process.env.TRANSFERWISE_BASE || 'https://api.transferwise.com';
 
+export const MIN_HOURS_DOMAIN: number = process.env.MIN_HOURS_DOMAIN ? parseInt(process.env.MIN_HOURS_DOMAIN, 10) : 24;
 export const MIN_NILS_PAYMENT: number = process.env.MIN_NILS_PAYMENT ? parseFloat(process.env.MIN_NILS_PAYMENT) : 1;
 export const NILS_GBP_RATIO: number = process.env.NILS_GBP_RATIO ? parseFloat(process.env.NILS_GBP_RATIO) : 0.001;

@@ -12,19 +12,18 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const error_1 = __importDefault(require("../../lib/error"));
-const db_1 = __importDefault(require("../../db"));
+const db_1 = __importDefault(require("../../../db"));
+const error_1 = __importDefault(require("../../../lib/error"));
+const token_1 = require("./util/token");
 exports.default = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    let data = yield db_1.default.query('SELECT balance FROM users WHERE uuid = $1', [req.user.uuid]);
-    if (data.rows.length < 1) {
-        return error_1.default(res)(404, 'Balance not found!');
+    const domain = req.params.domain;
+    const data = yield db_1.default.query('SELECT uuid FROM domains WHERE domain = $1', [domain]);
+    if (data.rows.length > 0) {
+        return error_1.default(res)(400, 'Domain already added, please get in touch if this is your domain');
     }
-    const balances = {
-        personal: data.rows[0].balance,
-        domains: [],
-    };
-    data = yield db_1.default.query('SELECT uuid, domain, balance, created_on FROM domains WHERE user_id = $1', [req.user.uuid]);
-    balances.domains = data.rows;
-    res.json(balances);
+    const token = token_1.genToken(req.user.uuid, domain);
+    res.json({
+        token,
+    });
 });
-//# sourceMappingURL=balance copy.js.map
+//# sourceMappingURL=initVerification.js.map

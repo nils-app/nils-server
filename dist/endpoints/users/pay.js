@@ -41,6 +41,20 @@ exports.default = [
                 return error_1.default(res)(404, `Domain "${payload.domain}" is not registered with Nils`);
             }
             const domainId = data.rows[0].uuid;
+            // Check that a transaction hasn't been sent within the last MIN_HOURS_DOMAIN
+            data = yield db_1.default.query('SELECT uuid, amount_nils, created_on FROM transactions WHERE user_id = $1 AND domain_id = $2 AND (EXTRACT(EPOCH FROM current_timestamp) - EXTRACT(EPOCH FROM created_on))/3600 < $3', [
+                req.user.uuid,
+                domainId,
+                constants_1.MIN_HOURS_DOMAIN,
+            ]);
+            if (data.rowCount > 0) {
+                // A transaction has already been made
+                return res.json({
+                    domain: payload.domain,
+                    amount_nils: payload.amount_nils,
+                    created_on: data.rows[0].created_on,
+                });
+            }
             yield client.query('BEGIN');
             // insert payment
             const params = [
@@ -53,13 +67,18 @@ exports.default = [
                 yield client.query('ROLLBACK');
                 return error_1.default(res)(500, `Unable to send payment to "${payload.domain}"`);
             }
-            const updated = yield db_1.default.query('UPDATE users SET balance = balance - $1 WHERE uuid = $2 RETURNING *', [payload.amount_nils, req.user.uuid]);
-            if (updated.rowCount < 1) {
+            const updatedUserBalance = yield db_1.default.query('UPDATE users SET balance = balance - $1 WHERE uuid = $2 RETURNING *', [payload.amount_nils, req.user.uuid]);
+            const updatedDomainBalance = yield db_1.default.query('UPDATE domains SET balance = balance + $1 WHERE uuid = $2 RETURNING *', [payload.amount_nils, domainId]);
+            if (updatedUserBalance.rowCount < 1 || updatedDomainBalance.rowCount < 1) {
                 yield client.query('ROLLBACK');
                 return error_1.default(res)(500, `Unable to send payment to "${payload.domain}"`);
             }
             yield client.query('COMMIT');
-            return res.json(data.rows[0]);
+            return res.json({
+                domain: payload.domain,
+                amount_nils: payload.amount_nils,
+                created_on: data.rows[0].created_on,
+            });
         }
         catch (e) {
             console.error(e);

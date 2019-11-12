@@ -10,6 +10,7 @@ const pay_1 = __importDefault(require("./pay"));
 const unblock_1 = __importDefault(require("./unblock"));
 const current_1 = __importDefault(require("./current"));
 const logout_1 = __importDefault(require("./logout"));
+const transactions_1 = __importDefault(require("./transactions"));
 exports.router = express_promise_router_1.default();
 exports.default = exports.router;
 exports.router.get('/balance', balance_1.default);
@@ -17,5 +18,6 @@ exports.router.put('/block', block_1.default);
 exports.router.post('/pay', ...pay_1.default);
 exports.router.put('/unblock', unblock_1.default);
 exports.router.get('/current', current_1.default);
+exports.router.get('/transactions', transactions_1.default);
 exports.router.get('/logout', logout_1.default);
 //# sourceMappingURL=index.js.map
