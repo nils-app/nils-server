@@ -25,7 +25,7 @@ app.set('port', constants_1.PORT);
 app.set('env', constants_1.ENV);
 app.use(compression_1.default());
 const corsOptions = {
-    origin: true,
+    origin: constants_1.DOMAIN_FRONTEND,
     credentials: true,
     exposedHeaders: [csrf_1.CSRF_HEADER],
 };
@@ -40,8 +40,12 @@ app.use(lusca_1.default.xssProtection(true));
 app.use(lusca_1.default.xframe('SAMEORIGIN'));
 app.use(lusca_1.default.nosniff());
 app.disable('x-powered-by');
+app.use((req, res, next) => {
+    console.log(req);
+    next();
+});
 /**
- * Primary app routes.
+ * Routes
  */
 app.use('/users', auth_2.checkSession, csrf_1.checkCSRF, users_1.default);
 app.use('/domains', auth_2.checkSession, csrf_1.checkCSRF, domains_1.default);

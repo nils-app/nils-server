@@ -12,7 +12,7 @@ import users from './endpoints/users'
 import domains from './endpoints/domains'
 import payouts from './endpoints/payouts'
 import { checkCSRF, CSRF_HEADER } from './middleware/csrf'
-import { PORT, ENV } from './constants'
+import { PORT, ENV, DOMAIN_FRONTEND } from './constants'
 import { checkSession } from './middleware/auth'
 
 // Create Express server
@@ -25,7 +25,7 @@ app.set('env', ENV)
 app.use(compression())
 
 const corsOptions: cors.CorsOptions = {
-  origin: true,
+  origin: DOMAIN_FRONTEND,
   credentials: true,
   exposedHeaders: [CSRF_HEADER],
 }
@@ -44,8 +44,13 @@ app.use(lusca.xframe('SAMEORIGIN'))
 app.use(lusca.nosniff())
 app.disable('x-powered-by')
 
+app.use((req, res, next) => {
+  console.log(req);
+  next();
+});
+
 /**
- * Primary app routes.
+ * Routes
  */
 app.use('/users', checkSession, checkCSRF, users)
 app.use('/domains', checkSession, checkCSRF, domains)
