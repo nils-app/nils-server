@@ -40,10 +40,6 @@ app.use(lusca_1.default.xssProtection(true));
 app.use(lusca_1.default.xframe('SAMEORIGIN'));
 app.use(lusca_1.default.nosniff());
 app.disable('x-powered-by');
-app.use((req, res, next) => {
-    console.log(req);
-    next();
-});
 /**
  * Routes
  */
