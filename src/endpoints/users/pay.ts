@@ -24,18 +24,22 @@ export default [
       payload.amount_nils = MIN_NILS_PAYMENT;
     }
 
+    // clean up the domain
+
+
     // Using a db client to allow combining all queries in a transaction
     const client = await db.connect()
+    let domainId;
 
     try {
-      // get the domain id
+      // TODO: replace domain with domain hash when column is added
       let data = await db.query('SELECT uuid FROM domains WHERE domain = $1', [payload.domain]);
       if (data.rows.length < 1) {
         // domain doesnt exist
         return errors(res)(404, `Domain "${payload.domain}" is not registered with Nils`);
       }
 
-      const domainId = data.rows[0].uuid;
+      domainId = data.rows[0].uuid;
 
       // Check that a transaction hasn't been sent within the last MIN_HOURS_DOMAIN
       data = await db.query('SELECT uuid, amount_nils, created_on FROM transactions WHERE user_id = $1 AND domain_id = $2 AND (EXTRACT(EPOCH FROM current_timestamp) - EXTRACT(EPOCH FROM created_on))/3600 < $3', [
@@ -53,6 +57,17 @@ export default [
         });
       }
 
+      // About to send a new transaction, check that the user has enough moneys
+      if (req.user.balance - payload.amount_nils <= 0) {
+        return errors(res)(422, `Your balance is too low! (${req.user.balance})`);
+      }
+
+    } catch (e) {
+      console.error(e);
+      await client.query('ROLLBACK');
+      return errors(res)(500, 'Unable to send payment');
+    }
+    try {
       await client.query('BEGIN')
 
       // insert payment
@@ -61,7 +76,7 @@ export default [
         domainId,
         payload.amount_nils,
       ];
-      data = await db.query('INSERT INTO transactions(user_id, domain_id, amount_nils) VALUES($1, $2, $3) RETURNING *', params);
+      let data = await db.query('INSERT INTO transactions(user_id, domain_id, amount_nils) VALUES($1, $2, $3) RETURNING *', params);
 
       if (data.rows.length < 1) {
         await client.query('ROLLBACK');

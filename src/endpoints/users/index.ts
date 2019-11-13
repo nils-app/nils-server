@@ -7,6 +7,7 @@ import unblock from './unblock'
 import current from './current'
 import logout from './logout'
 import transactions from './transactions'
+import topup from './topup'
 
 export const router = Router()
 export default router
@@ -17,4 +18,5 @@ router.post('/pay', ...pay)
 router.put('/unblock', unblock)
 router.get('/current', current)
 router.get('/transactions', transactions)
+router.get('/topup', topup)
 router.get('/logout', logout)

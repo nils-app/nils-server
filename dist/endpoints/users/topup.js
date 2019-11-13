@@ -14,7 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const db_1 = __importDefault(require("../../db"));
 exports.default = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const data = yield db_1.default.query('SELECT uuid, amount_nils, amount_fiat, currency, created_on FROM payouts WHERE user_id = $1', [req.user.uuid]);
+    const data = yield db_1.default.query('UPDATE users SET balance = balance + 10 WHERE uuid = $1 RETURNING *', [req.user.uuid]);
     res.json(data.rows);
 });
-//# sourceMappingURL=list copy.js.map
+//# sourceMappingURL=topup.js.map

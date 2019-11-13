@@ -1,1 +1,0 @@
-{"version":3,"file":"token.js","sourceRoot":"","sources":["../../../../src/endpoints/domains/util/token.ts"],"names":[],"mappings":";;;;;AAAA,gEAA+B;AAE/B,kDAAgD;AAEnC,QAAA,QAAQ,GAAG,CAAC,IAAY,EAAE,MAAc,EAAU,EAAE;IAC/D,MAAM,OAAO,GAAG;QACd,IAAI;QACJ,MAAM;KACP,CAAC;IACF,OAAO,sBAAG,CAAC,IAAI,CAAC,IAAI,CAAC,SAAS,CAAC,OAAO,CAAC,EAAE,sBAAU,CAAC,CAAA;AACtD,CAAC,CAAC"}

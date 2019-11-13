@@ -1,1 +1,0 @@
-{"version":3,"file":"error.js","sourceRoot":"","sources":["../../../../src/endpoints/auth/lib/error.ts"],"names":[],"mappings":";;AAEA,MAAM,MAAM,GAAG,CAAC,GAAa,EAAE,EAAE,CAAC,CAAC,MAAc,EAAE,GAAG,MAAc,EAAE,EAAE;IACtE,OAAO,GAAG,CAAC,MAAM,CAAC,MAAM,CAAC,CAAC,IAAI,CAAC;QAC7B,MAAM;KACP,CAAC,CAAC;AACL,CAAC,CAAA;AAED,kBAAe,MAAM,CAAC"}
