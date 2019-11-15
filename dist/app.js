@@ -55,6 +55,11 @@ app.use('/auth', auth_1.default);
 app.get('/', status_1.default(app));
 app.use((err, req, res, next) => {
     console.log(err);
+    if (err && err.status) {
+        return res.status(err.status).json({
+            errors: err.message,
+        });
+    }
     res.status(500).json({
         errors: 'An error occurred',
     });

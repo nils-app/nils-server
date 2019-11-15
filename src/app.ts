@@ -62,6 +62,11 @@ app.get('/', status(app))
 
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   console.log(err);
+  if (err && err.status) {
+    return res.status(err.status).json({
+      errors: err.message,
+    });
+  }
   res.status(500).json({
     errors: 'An error occurred',
   });
