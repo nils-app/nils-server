@@ -1,5 +1,5 @@
 import passport = require("passport");
-import { Response, Request } from 'express'
+import { Response, Request, NextFunction } from 'express'
 import { Strategy as JWTstrategy, StrategyOptions as JWTStrategyOptions } from 'passport-jwt';
 
 import db from '../db'
@@ -18,7 +18,24 @@ export type JWT_PAYLOAD = {
   uuid: string,
 };
 export const JWT_MIDDLEWARE = 'jwt';
-export const checkSession = passport.authenticate(JWT_MIDDLEWARE, {session: false});
+
+/**
+ * Middleware to check whether the user is authenticated with a JWT cookie
+ */
+export const checkSession = (req: Request, res: Response, next: NextFunction) => {
+  passport.authenticate(JWT_MIDDLEWARE, {session: false}, (err, user) => {
+    if(err || !user) {
+        let error = err;
+        if (!error) {
+          error = {
+            errors: ['Unauthenicated'],
+          };
+        }
+        return res.status(401).json(error);
+    } 
+    return next();
+  })(req, res, next);
+};
 
 const opts: JWTStrategyOptions = {
   jwtFromRequest: (req: Request) => req.cookies ? req.cookies[JWT_COOKIE] : null,

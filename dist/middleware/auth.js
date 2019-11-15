@@ -18,7 +18,23 @@ const db_1 = __importDefault(require("../db"));
 const constants_1 = require("../constants");
 const middleware_1 = require("../endpoints/auth/util/middleware");
 exports.JWT_MIDDLEWARE = 'jwt';
-exports.checkSession = passport.authenticate(exports.JWT_MIDDLEWARE, { session: false });
+/**
+ * Middleware to check whether the user is authenticated with a JWT cookie
+ */
+exports.checkSession = (req, res, next) => {
+    passport.authenticate(exports.JWT_MIDDLEWARE, { session: false }, (err, user) => {
+        if (err || !user) {
+            let error = err;
+            if (!error) {
+                error = {
+                    errors: ['Unauthenicated'],
+                };
+            }
+            return res.status(401).json(error);
+        }
+        return next();
+    })(req, res, next);
+};
 const opts = {
     jwtFromRequest: (req) => req.cookies ? req.cookies[middleware_1.JWT_COOKIE] : null,
     secretOrKey: constants_1.JWT_SECRET,
