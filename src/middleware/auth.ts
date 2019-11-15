@@ -22,20 +22,10 @@ export const JWT_MIDDLEWARE = 'jwt';
 /**
  * Middleware to check whether the user is authenticated with a JWT cookie
  */
-export const checkSession = (req: Request, res: Response, next: NextFunction) => {
-  passport.authenticate(JWT_MIDDLEWARE, {session: false}, (err, user) => {
-    if(err || !user) {
-        let error = err;
-        if (!error) {
-          error = {
-            errors: ['Unauthenicated'],
-          };
-        }
-        return res.status(401).json(error);
-    } 
-    return next();
-  })(req, res, next);
-};
+export const checkSession = passport.authenticate(JWT_MIDDLEWARE, {
+  session: false,
+  failWithError: true,
+});
 
 const opts: JWTStrategyOptions = {
   jwtFromRequest: (req: Request) => req.cookies ? req.cookies[JWT_COOKIE] : null,
@@ -55,7 +45,6 @@ passport.use(
 
     try {
       const data = await db.query('SELECT uuid, balance, transferwise_id, currency, created_on FROM users WHERE uuid = $1', [uuid]);
-
       if (data.rows.length < 1) {
         done(null, 'Please login again');
         return;
@@ -64,6 +53,7 @@ passport.use(
       const user: User = data.rows[0];
       done(null, user);
     } catch (err) {
+      console.error(err);
       done(err);
     }
   }),

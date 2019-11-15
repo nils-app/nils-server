@@ -21,20 +21,10 @@ exports.JWT_MIDDLEWARE = 'jwt';
 /**
  * Middleware to check whether the user is authenticated with a JWT cookie
  */
-exports.checkSession = (req, res, next) => {
-    passport.authenticate(exports.JWT_MIDDLEWARE, { session: false }, (err, user) => {
-        if (err || !user) {
-            let error = err;
-            if (!error) {
-                error = {
-                    errors: ['Unauthenicated'],
-                };
-            }
-            return res.status(401).json(error);
-        }
-        return next();
-    })(req, res, next);
-};
+exports.checkSession = passport.authenticate(exports.JWT_MIDDLEWARE, {
+    session: false,
+    failWithError: true,
+});
 const opts = {
     jwtFromRequest: (req) => req.cookies ? req.cookies[middleware_1.JWT_COOKIE] : null,
     secretOrKey: constants_1.JWT_SECRET,
@@ -57,6 +47,7 @@ passport.use(exports.JWT_MIDDLEWARE, new passport_jwt_1.Strategy(opts, (jwtPaylo
         done(null, user);
     }
     catch (err) {
+        console.error(err);
         done(err);
     }
 })));

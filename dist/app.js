@@ -40,6 +40,10 @@ app.use(lusca_1.default.xssProtection(true));
 app.use(lusca_1.default.xframe('SAMEORIGIN'));
 app.use(lusca_1.default.nosniff());
 app.disable('x-powered-by');
+app.use((req, res, next) => {
+    console.log(req.method, req.path, JSON.stringify(req.body));
+    next();
+});
 /**
  * Routes
  */
@@ -49,5 +53,11 @@ app.use('/payouts', auth_2.checkSession, csrf_1.checkCSRF, payouts_1.default);
 app.use('/auth', auth_1.default);
 // This endpoint must be the last one
 app.get('/', status_1.default(app));
+app.use((err, req, res, next) => {
+    console.log(err);
+    res.status(500).json({
+        errors: 'An error occurred',
+    });
+});
 exports.default = app;
 //# sourceMappingURL=app.js.map

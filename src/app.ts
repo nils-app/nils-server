@@ -1,4 +1,4 @@
-import express from 'express'
+import express, { Request, Response, NextFunction } from 'express'
 import compression from 'compression'
 import bodyParser from 'body-parser'
 import lusca from 'lusca'
@@ -44,6 +44,11 @@ app.use(lusca.xframe('SAMEORIGIN'))
 app.use(lusca.nosniff())
 app.disable('x-powered-by')
 
+app.use((req, res, next) => {
+  console.log(req.method, req.path, JSON.stringify(req.body));
+  next();
+});
+
 /**
  * Routes
  */
@@ -54,5 +59,12 @@ app.use('/auth', auth)
 
 // This endpoint must be the last one
 app.get('/', status(app))
+
+app.use((err: any, req: Request, res: Response, next: NextFunction) => {
+  console.log(err);
+  res.status(500).json({
+    errors: 'An error occurred',
+  });
+});
 
 export default app
