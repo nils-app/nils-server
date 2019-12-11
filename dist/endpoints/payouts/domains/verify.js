@@ -30,24 +30,31 @@ function processVerification(req, res, domain) {
 exports.default = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const domain = req.params.domain;
     const token = token_1.genToken(req.user.uuid, domain);
-    let verified = false;
+    let verified = false, error = null;
+    const errorList = [];
     // File verification
-    verified = yield verifyUrl(`http://${domain}/.well-known/nils`, token);
+    [verified, error] = yield verifyUrl(`http://${domain}/.well-known/nils`, token, 'HTTP');
     if (verified) {
         return processVerification(req, res, domain);
     }
-    verified = yield verifyUrl(`https://${domain}/.well-known/nils`, token);
+    if (error)
+        errorList.push(error);
+    [verified, error] = yield verifyUrl(`https://${domain}/.well-known/nils`, token, 'HTTPS');
     if (verified) {
         return processVerification(req, res, domain);
     }
+    if (error)
+        errorList.push(error);
     // DNS verification
-    verified = yield verifyDns(domain, token);
+    [verified, error] = yield verifyDns(domain, token);
+    if (error)
+        errorList.push(error);
     if (verified) {
         return processVerification(req, res, domain);
     }
-    return error_1.default(res)(404, 'Unable to verify domain');
+    return error_1.default(res)(404, errorList || 'Unable to verify domain');
 });
-function verifyUrl(url, token) {
+function verifyUrl(url, token, type) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const options = {
@@ -58,19 +65,24 @@ function verifyUrl(url, token) {
             };
             const response = yield axios_1.default(options);
             const receivedToken = yield response.data;
-            return token === receivedToken;
+            if (token === receivedToken) {
+                return [token === receivedToken, null];
+            }
+            else {
+                return [false, 'Found Nils file, but the token didn\'t match the expected value.'];
+            }
         }
         catch (e) {
-            return false;
+            return [false, `${type} verification failed: ${e.message}`];
         }
     });
 }
 function verifyDns(domain, token) {
     return __awaiter(this, void 0, void 0, function* () {
         return new Promise(resolve => {
+            let error = 'Unable to get TXT records, please verify the domain name or try again later.';
             dns_1.default.resolveTxt(domain, (err, records) => {
                 if (err) {
-                    console.error('Unable to get TXT records');
                     return;
                 }
                 for (let i = 0; i < records.length; i++) {
@@ -83,12 +95,19 @@ function verifyDns(domain, token) {
                         continue;
                     }
                     if (parts[1] === token) {
-                        resolve(true);
+                        resolve([true, null]);
                         return;
                     }
+                    else {
+                        error = 'DNS Nils token was found, but didn\'t match the expected value.';
+                        break;
+                    }
                 }
-                resolve(false);
+                console.error('Failed', error);
+                resolve([false, error]);
             });
+            console.error('Failed', error);
+            resolve([false, error]);
         });
     });
 }
