@@ -44,10 +44,11 @@ app.use(lusca.xframe('SAMEORIGIN'))
 app.use(lusca.nosniff())
 app.disable('x-powered-by')
 
-app.use((req, res, next) => {
-  console.log(req.method, req.path, JSON.stringify(req.body));
-  next();
-});
+// Log all requests
+// app.use((req, res, next) => {
+//   console.log(req.method, req.path, JSON.stringify(req.body));
+//   next();
+// });
 
 /**
  * Routes
