@@ -69,18 +69,18 @@ function verifyUrl(url, token, type) {
                 return [token === receivedToken, null];
             }
             else {
-                return [false, 'Found Nils file, but the token didn\'t match the expected value.'];
+                return [false, `Found Nils file, but the token didn\'t match the expected value. Found: ${receivedToken}. Expected: ${token}`];
             }
         }
         catch (e) {
-            return [false, `${type} verification failed: ${e.message}`];
+            return [false, `${type}: ${e.message}`];
         }
     });
 }
 function verifyDns(domain, token) {
     return __awaiter(this, void 0, void 0, function* () {
         return new Promise(resolve => {
-            let error = 'Unable to get TXT records, please verify the domain name or try again later.';
+            let error = 'DNS: Unable to get TXT records, please verify the domain name or try again later.';
             dns_1.default.resolveTxt(domain, (err, records) => {
                 if (err) {
                     return;
@@ -99,15 +99,14 @@ function verifyDns(domain, token) {
                         return;
                     }
                     else {
-                        error = 'DNS Nils token was found, but didn\'t match the expected value.';
+                        console.log('found but token didnt match');
+                        error = `DNS: Nils token was found, but didn\'t match the expected value. Found: ${parts[1]}. Expected: ${token}`;
                         break;
                     }
                 }
                 console.error('Failed', error);
                 resolve([false, error]);
             });
-            console.error('Failed', error);
-            resolve([false, error]);
         });
     });
 }

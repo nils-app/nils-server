@@ -63,16 +63,16 @@ async function verifyUrl(url: string, token: string, type: string): Promise<Veri
     if (token === receivedToken) {
       return [token === receivedToken, null ];
     } else {
-      return [false, 'Found Nils file, but the token didn\'t match the expected value.' ];
+      return [false, `Found Nils file, but the token didn\'t match the expected value. Found: ${receivedToken}. Expected: ${token}`];
     }
   } catch (e) {
-    return [ false, `${type} verification failed: ${e.message}` ];
+    return [ false, `${type}: ${e.message}` ];
   }
 }
 
 async function verifyDns(domain: string, token: string): Promise<VerificationResult> {
   return new Promise<VerificationResult>(resolve => {
-    let error: string = 'Unable to get TXT records, please verify the domain name or try again later.';
+    let error: string = 'DNS: Unable to get TXT records, please verify the domain name or try again later.';
     dns.resolveTxt(domain, (err, records) => {
       if (err) {
         return;
@@ -90,14 +90,13 @@ async function verifyDns(domain: string, token: string): Promise<VerificationRes
           resolve([true, null]);
           return;
         } else {
-          error = 'DNS Nils token was found, but didn\'t match the expected value.';
+          console.log('found but token didnt match');
+          error = `DNS: Nils token was found, but didn\'t match the expected value. Found: ${parts[1]}. Expected: ${token}`;
           break;
         }
       }
       console.error('Failed', error);
       resolve([false, error]);
     });
-    console.error('Failed', error);
-    resolve([false, error]);
   });
 }
